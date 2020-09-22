@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: bete-backend
+  datasource:
+    url: jdbc:postgresql://server-bete-ucb.postgres.database.azure.com:5432/database_bete
+    username: adamquiroz@server-bete-ucb
+    password: TallerSis2020
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    format_sql: true
+    show-sql: false
+bete-backend:
+  security:
+    salt: qwertyuiop
+    secretJwt: 1234567890
