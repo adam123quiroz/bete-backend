@@ -2,24 +2,35 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="bo.edu.ucb_bete-backend_jar_0.0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>bo.edu.ucb.betebackend.domain.Tournament</class>
-    <class>bo.edu.ucb.betebackend.domain.Bet</class>
-    <class>bo.edu.ucb.betebackend.domain.TournamentTeam</class>
-    <class>bo.edu.ucb.betebackend.domain.PgStatStatements</class>
-    <class>bo.edu.ucb.betebackend.domain.Region</class>
-    <class>bo.edu.ucb.betebackend.domain.UserTeam</class>
-    <class>bo.edu.ucb.betebackend.domain.Team</class>
-    <class>bo.edu.ucb.betebackend.domain.Notification</class>
-    <class>bo.edu.ucb.betebackend.domain.PgBuffercache</class>
-    <class>bo.edu.ucb.betebackend.domain.Review</class>
-    <class>bo.edu.ucb.betebackend.domain.User</class>
-    <class>bo.edu.ucb.betebackend.domain.Gambler</class>
-    <class>bo.edu.ucb.betebackend.domain.Game</class>
-    <class>bo.edu.ucb.betebackend.domain.Organizer</class>
-    <class>bo.edu.ucb.betebackend.domain.Match</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.TournamentEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.BetEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.TournamentTeamEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.RegionEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.UserTeamEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.TeamEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.NotificationEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.ReviewEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.UserEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.GamblerEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.GameEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.OrganizerEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.MatchEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.BetEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.GamblerEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.TournamentTeamEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.NotificationEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.UserTeamEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.OrganizerEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.GameEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.ReviewEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.TeamEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.UserEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.MatchEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.RegionEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.TournamentEntity</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://server-bete-ucb.postgres.database.azure.com:5432/database_bete"/>
-      <property name="javax.persistence.jdbc.user" value="adamquiroz@server-bete-ucb"/>
+      <property name="javax.persistence.jdbc.userEntity" value="adamquiroz@server-bete-ucb"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
       <property name="javax.persistence.jdbc.password" value="TallerSis2020"/>
     </properties>
