@@ -14,3 +14,7 @@ bete-backend:
   security:
     salt: qwertyuiop
     secretJwt: 1234567890
+server:
+  servlet:
+    context-path: /bete/api
+

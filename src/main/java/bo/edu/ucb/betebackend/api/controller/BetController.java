@@ -2,6 +2,7 @@ package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.domain.Bet;
 import bo.edu.ucb.betebackend.domain.service.BetService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,7 @@ public class BetController {
         this.betService = betService;
     }
 
+    @GetMapping("/all")
     public List<Bet> getAllBets() {
         return betService.getAllBet().orElseGet(Collections::emptyList);
     }
