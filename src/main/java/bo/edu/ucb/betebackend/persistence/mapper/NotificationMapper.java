@@ -12,10 +12,7 @@ import org.mapstruct.Mappings;
 })
 public interface NotificationMapper {
     @Mappings({
-            @Mapping(source = "idNotification", target = "idNotification"),
-            @Mapping(source = "mesage", target = "message"),
-            @Mapping(source = "status", target = "status"),
-            @Mapping(source = "user", target = "user"),
+            @Mapping(source = "mesage", target = "message")
     })
     Notification toNotification(NotificationEntity notificationEntity);
 

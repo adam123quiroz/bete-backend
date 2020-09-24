@@ -7,15 +7,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-@Mapper(componentModel = "spring")
+import java.util.List;
+
+@Mapper(componentModel = "spring", uses = {TournamentMapper.class})
 public interface GameMapper {
     @Mappings({
-            @Mapping(source = "idGame", target = "idGame"),
-            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "tournamentEntityList", target = "tournamentList")
     })
     Game toGame(GameEntity gameEntity);
+    List<Game> toGameList(List<GameEntity> gameEntities);
 
     @InheritInverseConfiguration
-    @Mapping(target = "tournamentEntityList", ignore = true)
     GameEntity toGameEntity(Game game);
 }

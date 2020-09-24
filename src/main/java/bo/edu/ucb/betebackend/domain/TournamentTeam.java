@@ -1,10 +1,13 @@
 package bo.edu.ucb.betebackend.domain;
 
+import java.util.List;
+
 public class TournamentTeam {
     private Integer idTournamentTeam;
     private int phase;
     private Team team;
     private Tournament tournament;
+    private List<Match> matchList;
 
     public Integer getIdTournamentTeam() {
         return idTournamentTeam;
@@ -36,5 +39,13 @@ public class TournamentTeam {
 
     public void setTournament(Tournament tournament) {
         this.tournament = tournament;
+    }
+
+    public List<Match> getMatchList() {
+        return matchList;
+    }
+
+    public void setMatchList(List<Match> matchList) {
+        this.matchList = matchList;
     }
 }

@@ -1,6 +1,7 @@
 package bo.edu.ucb.betebackend.domain;
 
 import java.util.Date;
+import java.util.List;
 
 public class Tournament {
     private Integer idTournament;
@@ -10,6 +11,7 @@ public class Tournament {
     private Date startDate;
     private Date endDate;
     private int isFinished;
+    private List<TournamentTeam> tournamentTeamList;
     private Game game;
     private Organizer organizer;
 
@@ -67,6 +69,14 @@ public class Tournament {
 
     public void setIsFinished(int isFinished) {
         this.isFinished = isFinished;
+    }
+
+    public List<TournamentTeam> getTournamentTeamList() {
+        return tournamentTeamList;
+    }
+
+    public void setTournamentTeamList(List<TournamentTeam> tournamentTeamList) {
+        this.tournamentTeamList = tournamentTeamList;
     }
 
     public Game getGame() {

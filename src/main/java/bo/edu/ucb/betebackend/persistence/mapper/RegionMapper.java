@@ -7,15 +7,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface RegionMapper {
     @Mappings({
-            @Mapping(source = "idRegion", target = "idRegion"),
-            @Mapping(source = "regionName", target = "regionName")
+            @Mapping(source = "userEntityList", target = "userList")
     })
     Region toRegion(RegionEntity regionEntity);
 
     @InheritInverseConfiguration
-    @Mapping(target = "userEntityList", ignore = true)
     RegionEntity toRegionEntity(Region region);
 }

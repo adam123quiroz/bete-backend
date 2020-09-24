@@ -9,23 +9,16 @@ import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring", uses = {
         GameMapper.class,
-        OrganizerMapper.class
+        OrganizerMapper.class,
+        TournamentTeamMapper.class
 })
 public interface TournamentMapper {
     @Mappings({
-            @Mapping(source = "idTournament", target = "idTournament"),
             @Mapping(source = "nombre", target = "name"),
-            @Mapping(source = "description", target = "description"),
-            @Mapping(source = "status", target = "status"),
-            @Mapping(source = "startDate", target = "startDate"),
-            @Mapping(source = "endDate", target = "endDate"),
-            @Mapping(source = "isFinished", target = "isFinished"),
-            @Mapping(source = "game", target = "game"),
-            @Mapping(source = "organizer", target = "organizer"),
+            @Mapping(source = "tournamentTeamEntityList", target = "tournamentTeamList")
     })
     Tournament toTournament(TournamentEntity tournamentEntity);
 
     @InheritInverseConfiguration
-    @Mapping(target = "tournamentTeamEntityList", ignore = true)
     TournamentEntity toTournamentEntity(Tournament tournament);
 }

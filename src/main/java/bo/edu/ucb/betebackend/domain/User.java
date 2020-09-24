@@ -1,5 +1,7 @@
 package bo.edu.ucb.betebackend.domain;
 
+import java.util.List;
+
 public class User {
     private Integer idUser;
     private String username;
@@ -13,6 +15,11 @@ public class User {
     private int isGambler;
     private String password;
     private int status;
+    private List<UserTeam> userTeamList;
+    private List<Notification> notificationList;
+    private List<Organizer> organizerList;
+    private List<Review> reviewList;
+    private List<Gambler> gamblerList;
     private Region region;
 
     public Integer getIdUser() {
@@ -117,5 +124,45 @@ public class User {
 
     public void setRegion(Region region) {
         this.region = region;
+    }
+
+    public List<UserTeam> getUserTeamList() {
+        return userTeamList;
+    }
+
+    public void setUserTeamList(List<UserTeam> userTeamList) {
+        this.userTeamList = userTeamList;
+    }
+
+    public List<Notification> getNotificationList() {
+        return notificationList;
+    }
+
+    public void setNotificationList(List<Notification> notificationList) {
+        this.notificationList = notificationList;
+    }
+
+    public List<Organizer> getOrganizerList() {
+        return organizerList;
+    }
+
+    public void setOrganizerList(List<Organizer> organizerList) {
+        this.organizerList = organizerList;
+    }
+
+    public List<Review> getReviewList() {
+        return reviewList;
+    }
+
+    public void setReviewList(List<Review> reviewList) {
+        this.reviewList = reviewList;
+    }
+
+    public List<Gambler> getGamblerList() {
+        return gamblerList;
+    }
+
+    public void setGamblerList(List<Gambler> gamblerList) {
+        this.gamblerList = gamblerList;
     }
 }

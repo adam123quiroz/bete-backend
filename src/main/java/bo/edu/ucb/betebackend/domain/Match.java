@@ -1,6 +1,7 @@
 package bo.edu.ucb.betebackend.domain;
 
 import java.util.Date;
+import java.util.List;
 
 public class Match {
     private Integer idMatch;
@@ -14,6 +15,8 @@ public class Match {
     private Team team2;
     private Team team1;
     private TournamentTeam tournament;
+    private List<Bet> betList;
+
 
     public Integer getIdMatch() {
         return idMatch;
@@ -101,5 +104,13 @@ public class Match {
 
     public void setTournament(TournamentTeam tournament) {
         this.tournament = tournament;
+    }
+
+    public List<Bet> getBetList() {
+        return betList;
+    }
+
+    public void setBetList(List<Bet> betList) {
+        this.betList = betList;
     }
 }

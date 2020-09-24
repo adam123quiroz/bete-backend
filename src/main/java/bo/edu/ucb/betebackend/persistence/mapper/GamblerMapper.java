@@ -8,19 +8,17 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring", uses = {
-        UserMapper.class
+        UserMapper.class,
+        BetMapper.class
+
 })
 public interface GamblerMapper {
 
     @Mappings({
-            @Mapping(source = "idGambler", target = "idGambler"),
-            @Mapping(source = "bankCard", target = "bankCard"),
-            @Mapping(source = "coins", target = "coins"),
-            @Mapping(source = "idUser", target = "idUser")
+            @Mapping(source = "betEntityList", target = "betList")
     })
     Gambler toGambler(GamblerEntity gamblerEntity);
 
     @InheritInverseConfiguration
-    @Mapping(target = "betEntityList", ignore = true)
     GamblerEntity toGamblerEntity(Gambler gambler);
 }
