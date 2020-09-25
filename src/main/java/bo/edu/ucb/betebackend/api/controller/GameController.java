@@ -20,7 +20,8 @@ public class GameController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Game>> getAllGames() {
-        return new ResponseEntity<>(gameService.getAllGame().orElseGet(Collections::emptyList), HttpStatus.OK);
+        return new ResponseEntity<>(gameService.getAllGame()
+                .orElseGet(Collections::emptyList), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -43,4 +44,4 @@ public class GameController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
- }
+}
