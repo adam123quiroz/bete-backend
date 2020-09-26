@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ReviewEntity.findAll", query = "SELECT r FROM ReviewEntity r"),
     @NamedQuery(name = "ReviewEntity.findByIdReview", query = "SELECT r FROM ReviewEntity r WHERE r.idReview = :idReview"),
-    @NamedQuery(name = "ReviewEntity.findByStars", query = "SELECT r FROM ReviewEntity r WHERE r.stars = :stars")})
+    @NamedQuery(name = "ReviewEntity.findByStars", query = "SELECT r FROM ReviewEntity r WHERE r.stars = :stars"),
+    @NamedQuery(name = "ReviewEntity.findByStatus", query = "SELECT r FROM ReviewEntity r WHERE r.status = :status")})
 public class ReviewEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,12 +40,15 @@ public class ReviewEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "stars")
     private float stars;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private int status;
+    @JoinColumn(name = "user", referencedColumnName = "id_user")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private BeteUserEntity user;
     @JoinColumn(name = "organizer", referencedColumnName = "id_organizer")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private OrganizerEntity organizer;
-    @JoinColumn(name = "user", referencedColumnName = "id_user")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private UserEntity user;
 
     public ReviewEntity() {
     }
@@ -53,9 +57,10 @@ public class ReviewEntity implements Serializable {
         this.idReview = idReview;
     }
 
-    public ReviewEntity(Integer idReview, float stars) {
+    public ReviewEntity(Integer idReview, float stars, int status) {
         this.idReview = idReview;
         this.stars = stars;
+        this.status = status;
     }
 
     public Integer getIdReview() {
@@ -74,20 +79,28 @@ public class ReviewEntity implements Serializable {
         this.stars = stars;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public BeteUserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(BeteUserEntity user) {
+        this.user = user;
+    }
+
     public OrganizerEntity getOrganizer() {
         return organizer;
     }
 
     public void setOrganizer(OrganizerEntity organizer) {
         this.organizer = organizer;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
     }
 
     @Override

@@ -29,23 +29,23 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author artud
  */
 @Entity
-@Table(name = "user")
+@Table(name = "bete_user")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UserEntity.findAll", query = "SELECT u FROM UserEntity u"),
-    @NamedQuery(name = "UserEntity.findByIdUser", query = "SELECT u FROM UserEntity u WHERE u.idUser = :idUser"),
-    @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
-    @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT u FROM UserEntity u WHERE u.email = :email"),
-    @NamedQuery(name = "UserEntity.findByName", query = "SELECT u FROM UserEntity u WHERE u.name = :name"),
-    @NamedQuery(name = "UserEntity.findByLastname", query = "SELECT u FROM UserEntity u WHERE u.lastname = :lastname"),
-    @NamedQuery(name = "UserEntity.findByCountryCode", query = "SELECT u FROM UserEntity u WHERE u.countryCode = :countryCode"),
-    @NamedQuery(name = "UserEntity.findByCellphoneNumber", query = "SELECT u FROM UserEntity u WHERE u.cellphoneNumber = :cellphoneNumber"),
-    @NamedQuery(name = "UserEntity.findByIsPlayer", query = "SELECT u FROM UserEntity u WHERE u.isPlayer = :isPlayer"),
-    @NamedQuery(name = "UserEntity.findByIsOrganizer", query = "SELECT u FROM UserEntity u WHERE u.isOrganizer = :isOrganizer"),
-    @NamedQuery(name = "UserEntity.findByIsGambler", query = "SELECT u FROM UserEntity u WHERE u.isGambler = :isGambler"),
-    @NamedQuery(name = "UserEntity.findByPassword", query = "SELECT u FROM UserEntity u WHERE u.password = :password"),
-    @NamedQuery(name = "UserEntity.findByStatus", query = "SELECT u FROM UserEntity u WHERE u.status = :status")})
-public class UserEntity implements Serializable {
+    @NamedQuery(name = "BeteUserEntity.findAll", query = "SELECT b FROM BeteUserEntity b"),
+    @NamedQuery(name = "BeteUserEntity.findByIdUser", query = "SELECT b FROM BeteUserEntity b WHERE b.idUser = :idUser"),
+    @NamedQuery(name = "BeteUserEntity.findByUsername", query = "SELECT b FROM BeteUserEntity b WHERE b.username = :username"),
+    @NamedQuery(name = "BeteUserEntity.findByPassword", query = "SELECT b FROM BeteUserEntity b WHERE b.password = :password"),
+    @NamedQuery(name = "BeteUserEntity.findByEmail", query = "SELECT b FROM BeteUserEntity b WHERE b.email = :email"),
+    @NamedQuery(name = "BeteUserEntity.findByName", query = "SELECT b FROM BeteUserEntity b WHERE b.name = :name"),
+    @NamedQuery(name = "BeteUserEntity.findByLastname", query = "SELECT b FROM BeteUserEntity b WHERE b.lastname = :lastname"),
+    @NamedQuery(name = "BeteUserEntity.findByCountryCode", query = "SELECT b FROM BeteUserEntity b WHERE b.countryCode = :countryCode"),
+    @NamedQuery(name = "BeteUserEntity.findByCellphoneNumber", query = "SELECT b FROM BeteUserEntity b WHERE b.cellphoneNumber = :cellphoneNumber"),
+    @NamedQuery(name = "BeteUserEntity.findByIsPlayer", query = "SELECT b FROM BeteUserEntity b WHERE b.isPlayer = :isPlayer"),
+    @NamedQuery(name = "BeteUserEntity.findByIsOrganizer", query = "SELECT b FROM BeteUserEntity b WHERE b.isOrganizer = :isOrganizer"),
+    @NamedQuery(name = "BeteUserEntity.findByIsGambler", query = "SELECT b FROM BeteUserEntity b WHERE b.isGambler = :isGambler"),
+    @NamedQuery(name = "BeteUserEntity.findByStatus", query = "SELECT b FROM BeteUserEntity b WHERE b.status = :status")})
+public class BeteUserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -56,6 +56,9 @@ public class UserEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "username")
     private String username;
+    @Basic(optional = false)
+    @Column(name = "password")
+    private String password;
     @Basic(optional = false)
     @Column(name = "email")
     private String email;
@@ -81,13 +84,13 @@ public class UserEntity implements Serializable {
     @Column(name = "is_gambler")
     private int isGambler;
     @Basic(optional = false)
-    @Column(name = "password")
-    private String password;
-    @Basic(optional = false)
     @Column(name = "status")
     private int status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserTeamEntity> userTeamEntityList;
+    @JoinColumn(name = "region", referencedColumnName = "id_region")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private RegionEntity region;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<NotificationEntity> notificationEntityList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser", fetch = FetchType.LAZY)
@@ -96,20 +99,18 @@ public class UserEntity implements Serializable {
     private List<ReviewEntity> reviewEntityList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser", fetch = FetchType.LAZY)
     private List<GamblerEntity> gamblerEntityList;
-    @JoinColumn(name = "region", referencedColumnName = "id_region")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private RegionEntity region;
 
-    public UserEntity() {
+    public BeteUserEntity() {
     }
 
-    public UserEntity(Integer idUser) {
+    public BeteUserEntity(Integer idUser) {
         this.idUser = idUser;
     }
 
-    public UserEntity(Integer idUser, String username, String email, String name, String lastname, int countryCode, int cellphoneNumber, int isPlayer, int isOrganizer, int isGambler, String password, int status) {
+    public BeteUserEntity(Integer idUser, String username, String password, String email, String name, String lastname, int countryCode, int cellphoneNumber, int isPlayer, int isOrganizer, int isGambler, int status) {
         this.idUser = idUser;
         this.username = username;
+        this.password = password;
         this.email = email;
         this.name = name;
         this.lastname = lastname;
@@ -118,7 +119,6 @@ public class UserEntity implements Serializable {
         this.isPlayer = isPlayer;
         this.isOrganizer = isOrganizer;
         this.isGambler = isGambler;
-        this.password = password;
         this.status = status;
     }
 
@@ -136,6 +136,14 @@ public class UserEntity implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -202,14 +210,6 @@ public class UserEntity implements Serializable {
         this.isGambler = isGambler;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -225,6 +225,14 @@ public class UserEntity implements Serializable {
 
     public void setUserTeamEntityList(List<UserTeamEntity> userTeamEntityList) {
         this.userTeamEntityList = userTeamEntityList;
+    }
+
+    public RegionEntity getRegion() {
+        return region;
+    }
+
+    public void setRegion(RegionEntity region) {
+        this.region = region;
     }
 
     @XmlTransient
@@ -263,14 +271,6 @@ public class UserEntity implements Serializable {
         this.gamblerEntityList = gamblerEntityList;
     }
 
-    public RegionEntity getRegion() {
-        return region;
-    }
-
-    public void setRegion(RegionEntity region) {
-        this.region = region;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -281,10 +281,10 @@ public class UserEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UserEntity)) {
+        if (!(object instanceof BeteUserEntity)) {
             return false;
         }
-        UserEntity other = (UserEntity) object;
+        BeteUserEntity other = (BeteUserEntity) object;
         if ((this.idUser == null && other.idUser != null) || (this.idUser != null && !this.idUser.equals(other.idUser))) {
             return false;
         }
@@ -293,7 +293,7 @@ public class UserEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "bo.edu.ucb.betebackend.persistence.entity.UserEntity[ idUser=" + idUser + " ]";
+        return "bo.edu.ucb.betebackend.persistence.entity.BeteUserEntity[ idUser=" + idUser + " ]";
     }
     
 }

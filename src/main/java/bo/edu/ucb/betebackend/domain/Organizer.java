@@ -1,8 +1,5 @@
 package bo.edu.ucb.betebackend.domain;
 
-import bo.edu.ucb.betebackend.persistence.entity.ReviewEntity;
-import bo.edu.ucb.betebackend.persistence.entity.TournamentEntity;
-
 import java.util.List;
 
 public class Organizer {

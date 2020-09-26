@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "NotificationEntity.findAll", query = "SELECT n FROM NotificationEntity n"),
     @NamedQuery(name = "NotificationEntity.findByIdNotification", query = "SELECT n FROM NotificationEntity n WHERE n.idNotification = :idNotification"),
-    @NamedQuery(name = "NotificationEntity.findByMesage", query = "SELECT n FROM NotificationEntity n WHERE n.mesage = :mesage"),
+    @NamedQuery(name = "NotificationEntity.findByMessage", query = "SELECT n FROM NotificationEntity n WHERE n.message = :message"),
     @NamedQuery(name = "NotificationEntity.findByStatus", query = "SELECT n FROM NotificationEntity n WHERE n.status = :status")})
 public class NotificationEntity implements Serializable {
 
@@ -41,14 +41,14 @@ public class NotificationEntity implements Serializable {
     @Column(name = "id_notification")
     private Integer idNotification;
     @Basic(optional = false)
-    @Column(name = "mesage")
-    private String mesage;
+    @Column(name = "message")
+    private String message;
     @Basic(optional = false)
     @Column(name = "status")
     private int status;
     @JoinColumn(name = "user", referencedColumnName = "id_user")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private UserEntity user;
+    private BeteUserEntity user;
 
     public NotificationEntity() {
     }
@@ -57,9 +57,9 @@ public class NotificationEntity implements Serializable {
         this.idNotification = idNotification;
     }
 
-    public NotificationEntity(Integer idNotification, String mesage, int status) {
+    public NotificationEntity(Integer idNotification, String message, int status) {
         this.idNotification = idNotification;
-        this.mesage = mesage;
+        this.message = message;
         this.status = status;
     }
 
@@ -71,12 +71,12 @@ public class NotificationEntity implements Serializable {
         this.idNotification = idNotification;
     }
 
-    public String getMesage() {
-        return mesage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMesage(String mesage) {
-        this.mesage = mesage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public int getStatus() {
@@ -87,11 +87,11 @@ public class NotificationEntity implements Serializable {
         this.status = status;
     }
 
-    public UserEntity getUser() {
+    public BeteUserEntity getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(BeteUserEntity user) {
         this.user = user;
     }
 

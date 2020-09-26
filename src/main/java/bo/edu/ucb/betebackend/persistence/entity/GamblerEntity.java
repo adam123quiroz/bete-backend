@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "GamblerEntity.findAll", query = "SELECT g FROM GamblerEntity g"),
     @NamedQuery(name = "GamblerEntity.findByIdGambler", query = "SELECT g FROM GamblerEntity g WHERE g.idGambler = :idGambler"),
     @NamedQuery(name = "GamblerEntity.findByBankCard", query = "SELECT g FROM GamblerEntity g WHERE g.bankCard = :bankCard"),
-    @NamedQuery(name = "GamblerEntity.findByCoins", query = "SELECT g FROM GamblerEntity g WHERE g.coins = :coins")})
+    @NamedQuery(name = "GamblerEntity.findByCoins", query = "SELECT g FROM GamblerEntity g WHERE g.coins = :coins"),
+    @NamedQuery(name = "GamblerEntity.findByStatus", query = "SELECT g FROM GamblerEntity g WHERE g.status = :status")})
 public class GamblerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,11 +51,14 @@ public class GamblerEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "coins")
     private int coins;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private int status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gambler", fetch = FetchType.LAZY)
     private List<BetEntity> betEntityList;
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private UserEntity idUser;
+    private BeteUserEntity idUser;
 
     public GamblerEntity() {
     }
@@ -63,10 +67,11 @@ public class GamblerEntity implements Serializable {
         this.idGambler = idGambler;
     }
 
-    public GamblerEntity(Integer idGambler, String bankCard, int coins) {
+    public GamblerEntity(Integer idGambler, String bankCard, int coins, int status) {
         this.idGambler = idGambler;
         this.bankCard = bankCard;
         this.coins = coins;
+        this.status = status;
     }
 
     public Integer getIdGambler() {
@@ -93,6 +98,14 @@ public class GamblerEntity implements Serializable {
         this.coins = coins;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @XmlTransient
     public List<BetEntity> getBetEntityList() {
         return betEntityList;
@@ -102,11 +115,11 @@ public class GamblerEntity implements Serializable {
         this.betEntityList = betEntityList;
     }
 
-    public UserEntity getIdUser() {
+    public BeteUserEntity getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(UserEntity idUser) {
+    public void setIdUser(BeteUserEntity idUser) {
         this.idUser = idUser;
     }
 

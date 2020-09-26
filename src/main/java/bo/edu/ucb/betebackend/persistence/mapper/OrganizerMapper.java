@@ -20,5 +20,6 @@ public interface OrganizerMapper {
     Organizer toOrganizer(OrganizerEntity organizerEntity);
 
     @InheritInverseConfiguration
+    @Mapping(target = "status", ignore = true)
     OrganizerEntity toOrganizerEntity(Organizer organizer);
 }

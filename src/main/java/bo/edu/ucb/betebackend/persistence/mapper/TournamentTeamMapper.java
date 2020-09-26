@@ -20,5 +20,6 @@ public interface TournamentTeamMapper {
     TournamentTeam toTournamentTeam(TournamentTeamEntity tournamentTeamEntity);
 
     @InheritInverseConfiguration
+    @Mapping(target = "status", ignore = true)
     TournamentTeamEntity toTournamentEntity(TournamentTeam tournamentTeam);
 }

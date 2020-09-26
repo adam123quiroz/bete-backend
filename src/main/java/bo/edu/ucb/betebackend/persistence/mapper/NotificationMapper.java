@@ -11,9 +11,6 @@ import org.mapstruct.Mappings;
         UserMapper.class
 })
 public interface NotificationMapper {
-    @Mappings({
-            @Mapping(source = "mesage", target = "message")
-    })
     Notification toNotification(NotificationEntity notificationEntity);
 
     @InheritInverseConfiguration

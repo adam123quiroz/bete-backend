@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "BetEntity.findByIdBet", query = "SELECT b FROM BetEntity b WHERE b.idBet = :idBet"),
     @NamedQuery(name = "BetEntity.findByQuantity", query = "SELECT b FROM BetEntity b WHERE b.quantity = :quantity"),
     @NamedQuery(name = "BetEntity.findByTeam", query = "SELECT b FROM BetEntity b WHERE b.team = :team"),
-    @NamedQuery(name = "BetEntity.findByDate", query = "SELECT b FROM BetEntity b WHERE b.date = :date")})
+    @NamedQuery(name = "BetEntity.findByDate", query = "SELECT b FROM BetEntity b WHERE b.date = :date"),
+    @NamedQuery(name = "BetEntity.findByStatus", query = "SELECT b FROM BetEntity b WHERE b.status = :status")})
 public class BetEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,6 +55,9 @@ public class BetEntity implements Serializable {
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
     private Date date;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private int status;
     @JoinColumn(name = "gambler", referencedColumnName = "id_gambler")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private GamblerEntity gambler;
@@ -71,11 +75,12 @@ public class BetEntity implements Serializable {
         this.idBet = idBet;
     }
 
-    public BetEntity(Integer idBet, int quantity, int team, Date date) {
+    public BetEntity(Integer idBet, int quantity, int team, Date date, int status) {
         this.idBet = idBet;
         this.quantity = quantity;
         this.team = team;
         this.date = date;
+        this.status = status;
     }
 
     public Integer getIdBet() {
@@ -108,6 +113,14 @@ public class BetEntity implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public GamblerEntity getGambler() {

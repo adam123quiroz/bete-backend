@@ -30,9 +30,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "region")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Region_1.findAll", query = "SELECT r FROM RegionEntity r"),
-    @NamedQuery(name = "Region_1.findByIdRegion", query = "SELECT r FROM RegionEntity r WHERE r.idRegion = :idRegion"),
-    @NamedQuery(name = "Region_1.findByRegionName", query = "SELECT r FROM RegionEntity r WHERE r.regionName = :regionName")})
+    @NamedQuery(name = "RegionEntity.findAll", query = "SELECT r FROM RegionEntity r"),
+    @NamedQuery(name = "RegionEntity.findByIdRegion", query = "SELECT r FROM RegionEntity r WHERE r.idRegion = :idRegion"),
+    @NamedQuery(name = "RegionEntity.findByRegionName", query = "SELECT r FROM RegionEntity r WHERE r.regionName = :regionName"),
+    @NamedQuery(name = "RegionEntity.findByStatus", query = "SELECT r FROM RegionEntity r WHERE r.status = :status")})
 public class RegionEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,8 +45,11 @@ public class RegionEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "region_name")
     private String regionName;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private int status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "region", fetch = FetchType.LAZY)
-    private List<UserEntity> userEntityList;
+    private List<BeteUserEntity> beteUserEntityList;
 
     public RegionEntity() {
     }
@@ -54,9 +58,10 @@ public class RegionEntity implements Serializable {
         this.idRegion = idRegion;
     }
 
-    public RegionEntity(Integer idRegion, String regionName) {
+    public RegionEntity(Integer idRegion, String regionName, int status) {
         this.idRegion = idRegion;
         this.regionName = regionName;
+        this.status = status;
     }
 
     public Integer getIdRegion() {
@@ -75,13 +80,21 @@ public class RegionEntity implements Serializable {
         this.regionName = regionName;
     }
 
-    @XmlTransient
-    public List<UserEntity> getUserEntityList() {
-        return userEntityList;
+    public int getStatus() {
+        return status;
     }
 
-    public void setUserEntityList(List<UserEntity> userEntityList) {
-        this.userEntityList = userEntityList;
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    @XmlTransient
+    public List<BeteUserEntity> getBeteUserEntityList() {
+        return beteUserEntityList;
+    }
+
+    public void setBeteUserEntityList(List<BeteUserEntity> beteUserEntityList) {
+        this.beteUserEntityList = beteUserEntityList;
     }
 
     @Override
@@ -106,7 +119,7 @@ public class RegionEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "bo.edu.ucb.betebackend.persistence.entity.Region_1[ idRegion=" + idRegion + " ]";
+        return "bo.edu.ucb.betebackend.persistence.entity.RegionEntity[ idRegion=" + idRegion + " ]";
     }
     
 }

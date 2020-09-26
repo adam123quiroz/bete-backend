@@ -5,7 +5,6 @@ import bo.edu.ucb.betebackend.domain.repository.IBetRepository;
 import bo.edu.ucb.betebackend.persistence.dao.BetRepository;
 import bo.edu.ucb.betebackend.persistence.entity.BetEntity;
 import bo.edu.ucb.betebackend.persistence.mapper.BetMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

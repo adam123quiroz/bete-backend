@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "GameEntity.findAll", query = "SELECT g FROM GameEntity g"),
     @NamedQuery(name = "GameEntity.findByIdGame", query = "SELECT g FROM GameEntity g WHERE g.idGame = :idGame"),
-    @NamedQuery(name = "GameEntity.findByName", query = "SELECT g FROM GameEntity g WHERE g.name = :name")})
+    @NamedQuery(name = "GameEntity.findByName", query = "SELECT g FROM GameEntity g WHERE g.name = :name"),
+    @NamedQuery(name = "GameEntity.findByStatus", query = "SELECT g FROM GameEntity g WHERE g.status = :status")})
 public class GameEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +45,9 @@ public class GameEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private int status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "game", fetch = FetchType.LAZY)
     private List<TournamentEntity> tournamentEntityList;
 
@@ -54,9 +58,10 @@ public class GameEntity implements Serializable {
         this.idGame = idGame;
     }
 
-    public GameEntity(Integer idGame, String name) {
+    public GameEntity(Integer idGame, String name, int status) {
         this.idGame = idGame;
         this.name = name;
+        this.status = status;
     }
 
     public Integer getIdGame() {
@@ -73,6 +78,14 @@ public class GameEntity implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @XmlTransient

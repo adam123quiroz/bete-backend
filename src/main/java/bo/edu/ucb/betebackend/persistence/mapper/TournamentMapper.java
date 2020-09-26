@@ -14,7 +14,6 @@ import org.mapstruct.Mappings;
 })
 public interface TournamentMapper {
     @Mappings({
-            @Mapping(source = "nombre", target = "name"),
             @Mapping(source = "tournamentTeamEntityList", target = "tournamentTeamList")
     })
     Tournament toTournament(TournamentEntity tournamentEntity);

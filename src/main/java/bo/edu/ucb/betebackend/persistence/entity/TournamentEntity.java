@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "TournamentEntity.findAll", query = "SELECT t FROM TournamentEntity t"),
     @NamedQuery(name = "TournamentEntity.findByIdTournament", query = "SELECT t FROM TournamentEntity t WHERE t.idTournament = :idTournament"),
-    @NamedQuery(name = "TournamentEntity.findByNombre", query = "SELECT t FROM TournamentEntity t WHERE t.nombre = :nombre"),
+    @NamedQuery(name = "TournamentEntity.findByName", query = "SELECT t FROM TournamentEntity t WHERE t.name = :name"),
     @NamedQuery(name = "TournamentEntity.findByDescription", query = "SELECT t FROM TournamentEntity t WHERE t.description = :description"),
     @NamedQuery(name = "TournamentEntity.findByStatus", query = "SELECT t FROM TournamentEntity t WHERE t.status = :status"),
     @NamedQuery(name = "TournamentEntity.findByStartDate", query = "SELECT t FROM TournamentEntity t WHERE t.startDate = :startDate"),
@@ -52,8 +52,8 @@ public class TournamentEntity implements Serializable {
     @Column(name = "id_tournament")
     private Integer idTournament;
     @Basic(optional = false)
-    @Column(name = "nombre")
-    private String nombre;
+    @Column(name = "name")
+    private String name;
     @Column(name = "description")
     private String description;
     @Basic(optional = false)
@@ -86,9 +86,9 @@ public class TournamentEntity implements Serializable {
         this.idTournament = idTournament;
     }
 
-    public TournamentEntity(Integer idTournament, String nombre, int status, Date startDate, Date endDate, int isFinished) {
+    public TournamentEntity(Integer idTournament, String name, int status, Date startDate, Date endDate, int isFinished) {
         this.idTournament = idTournament;
-        this.nombre = nombre;
+        this.name = name;
         this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -103,12 +103,12 @@ public class TournamentEntity implements Serializable {
         this.idTournament = idTournament;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

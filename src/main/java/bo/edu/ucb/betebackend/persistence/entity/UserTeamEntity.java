@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "UserTeamEntity.findAll", query = "SELECT u FROM UserTeamEntity u"),
     @NamedQuery(name = "UserTeamEntity.findByIdUserTeam", query = "SELECT u FROM UserTeamEntity u WHERE u.idUserTeam = :idUserTeam"),
-    @NamedQuery(name = "UserTeamEntity.findByIsCaptain", query = "SELECT u FROM UserTeamEntity u WHERE u.isCaptain = :isCaptain")})
+    @NamedQuery(name = "UserTeamEntity.findByIsCaptain", query = "SELECT u FROM UserTeamEntity u WHERE u.isCaptain = :isCaptain"),
+    @NamedQuery(name = "UserTeamEntity.findByStatus", query = "SELECT u FROM UserTeamEntity u WHERE u.status = :status")})
 public class UserTeamEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,12 +43,15 @@ public class UserTeamEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "is_captain")
     private int isCaptain;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private int status;
+    @JoinColumn(name = "user", referencedColumnName = "id_user")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private BeteUserEntity user;
     @JoinColumn(name = "team", referencedColumnName = "id_team")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TeamEntity team;
-    @JoinColumn(name = "user", referencedColumnName = "id_user")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private UserEntity user;
 
     public UserTeamEntity() {
     }
@@ -56,9 +60,10 @@ public class UserTeamEntity implements Serializable {
         this.idUserTeam = idUserTeam;
     }
 
-    public UserTeamEntity(Integer idUserTeam, int isCaptain) {
+    public UserTeamEntity(Integer idUserTeam, int isCaptain, int status) {
         this.idUserTeam = idUserTeam;
         this.isCaptain = isCaptain;
+        this.status = status;
     }
 
     public Integer getIdUserTeam() {
@@ -77,20 +82,28 @@ public class UserTeamEntity implements Serializable {
         this.isCaptain = isCaptain;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public BeteUserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(BeteUserEntity user) {
+        this.user = user;
+    }
+
     public TeamEntity getTeam() {
         return team;
     }
 
     public void setTeam(TeamEntity team) {
         this.team = team;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
     }
 
     @Override

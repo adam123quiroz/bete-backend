@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "OrganizerEntity.findAll", query = "SELECT o FROM OrganizerEntity o"),
     @NamedQuery(name = "OrganizerEntity.findByIdOrganizer", query = "SELECT o FROM OrganizerEntity o WHERE o.idOrganizer = :idOrganizer"),
     @NamedQuery(name = "OrganizerEntity.findByBankCard", query = "SELECT o FROM OrganizerEntity o WHERE o.bankCard = :bankCard"),
-    @NamedQuery(name = "OrganizerEntity.findByReputation", query = "SELECT o FROM OrganizerEntity o WHERE o.reputation = :reputation")})
+    @NamedQuery(name = "OrganizerEntity.findByReputation", query = "SELECT o FROM OrganizerEntity o WHERE o.reputation = :reputation"),
+    @NamedQuery(name = "OrganizerEntity.findByStatus", query = "SELECT o FROM OrganizerEntity o WHERE o.status = :status")})
 public class OrganizerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,11 +51,14 @@ public class OrganizerEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "reputation")
     private float reputation;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private int status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "organizer", fetch = FetchType.LAZY)
     private List<TournamentEntity> tournamentEntityList;
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private UserEntity idUser;
+    private BeteUserEntity idUser;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "organizer", fetch = FetchType.LAZY)
     private List<ReviewEntity> reviewEntityList;
 
@@ -65,10 +69,11 @@ public class OrganizerEntity implements Serializable {
         this.idOrganizer = idOrganizer;
     }
 
-    public OrganizerEntity(Integer idOrganizer, String bankCard, float reputation) {
+    public OrganizerEntity(Integer idOrganizer, String bankCard, float reputation, int status) {
         this.idOrganizer = idOrganizer;
         this.bankCard = bankCard;
         this.reputation = reputation;
+        this.status = status;
     }
 
     public Integer getIdOrganizer() {
@@ -95,6 +100,14 @@ public class OrganizerEntity implements Serializable {
         this.reputation = reputation;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @XmlTransient
     public List<TournamentEntity> getTournamentEntityList() {
         return tournamentEntityList;
@@ -104,11 +117,11 @@ public class OrganizerEntity implements Serializable {
         this.tournamentEntityList = tournamentEntityList;
     }
 
-    public UserEntity getIdUser() {
+    public BeteUserEntity getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(UserEntity idUser) {
+    public void setIdUser(BeteUserEntity idUser) {
         this.idUser = idUser;
     }
 

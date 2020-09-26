@@ -18,5 +18,6 @@ public interface GameMapper {
     List<Game> toGameList(List<GameEntity> gameEntities);
 
     @InheritInverseConfiguration
+    @Mapping(target = "status", ignore = true)
     GameEntity toGameEntity(Game game);
 }

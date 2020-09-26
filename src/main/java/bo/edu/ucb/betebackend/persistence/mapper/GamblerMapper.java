@@ -20,5 +20,6 @@ public interface GamblerMapper {
     Gambler toGambler(GamblerEntity gamblerEntity);
 
     @InheritInverseConfiguration
+    @Mapping(target = "status", ignore = true)
     GamblerEntity toGamblerEntity(Gambler gambler);
 }

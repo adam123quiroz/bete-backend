@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "TournamentTeamEntity.findAll", query = "SELECT t FROM TournamentTeamEntity t"),
     @NamedQuery(name = "TournamentTeamEntity.findByIdTournamentTeam", query = "SELECT t FROM TournamentTeamEntity t WHERE t.idTournamentTeam = :idTournamentTeam"),
-    @NamedQuery(name = "TournamentTeamEntity.findByPhase", query = "SELECT t FROM TournamentTeamEntity t WHERE t.phase = :phase")})
+    @NamedQuery(name = "TournamentTeamEntity.findByPhase", query = "SELECT t FROM TournamentTeamEntity t WHERE t.phase = :phase"),
+    @NamedQuery(name = "TournamentTeamEntity.findByStatus", query = "SELECT t FROM TournamentTeamEntity t WHERE t.status = :status")})
 public class TournamentTeamEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,6 +47,9 @@ public class TournamentTeamEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "phase")
     private int phase;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private int status;
     @JoinColumn(name = "team", referencedColumnName = "id_team")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TeamEntity team;
@@ -62,9 +66,10 @@ public class TournamentTeamEntity implements Serializable {
         this.idTournamentTeam = idTournamentTeam;
     }
 
-    public TournamentTeamEntity(Integer idTournamentTeam, int phase) {
+    public TournamentTeamEntity(Integer idTournamentTeam, int phase, int status) {
         this.idTournamentTeam = idTournamentTeam;
         this.phase = phase;
+        this.status = status;
     }
 
     public Integer getIdTournamentTeam() {
@@ -81,6 +86,14 @@ public class TournamentTeamEntity implements Serializable {
 
     public void setPhase(int phase) {
         this.phase = phase;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public TeamEntity getTeam() {

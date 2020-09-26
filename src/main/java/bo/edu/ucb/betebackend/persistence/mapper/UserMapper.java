@@ -1,7 +1,7 @@
 package bo.edu.ucb.betebackend.persistence.mapper;
 
 import bo.edu.ucb.betebackend.domain.User;
-import bo.edu.ucb.betebackend.persistence.entity.UserEntity;
+import bo.edu.ucb.betebackend.persistence.entity.BeteUserEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,15 +17,15 @@ import org.mapstruct.Mappings;
         GamblerMapper.class
 })
 public interface UserMapper {
-    @Mappings({
+/*    @Mappings({
             @Mapping(source = "userTeamEntityList", target = "userTeamList"),
             @Mapping(source = "notificationEntityList", target = "notificationList"),
             @Mapping(source = "organizerEntityList", target = "organizerList"),
             @Mapping(source = "reviewEntityList", target = "reviewList"),
             @Mapping(source = "gamblerEntityList", target = "gamblerList"),
-    })
-    User toUser(UserEntity userEntity);
+    })*/
+    User toUser(BeteUserEntity userEntity);
 
     @InheritInverseConfiguration
-    UserEntity toUserEntity(User user);
+    BeteUserEntity toUserEntity(User user);
 }
