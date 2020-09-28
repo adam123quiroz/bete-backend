@@ -1,7 +1,9 @@
 package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.domain.Game;
+import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
 import bo.edu.ucb.betebackend.domain.service.GameService;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,29 +21,61 @@ public class GameController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Game>> getAllGames() {
-        return new ResponseEntity<>(gameService.getAllGame()
-                .orElseGet(Collections::emptyList), HttpStatus.OK);
+    @ApiOperation("get all the games available")
+    @ApiResponse(code = 200, message = "OK")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+    public ResponseEntity<FormatResponse<List<Game>>> getAllGames() {
+        return new ResponseEntity<>(new FormatResponse<>(null,
+                gameService
+                        .getAllGame()
+                        .orElseGet(Collections::emptyList)),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> getGameById(@PathVariable("id") Integer id) {
+    @ApiOperation("authentication for register users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+    public ResponseEntity<FormatResponse<Game>> getGameById(@PathVariable("id") Integer id) {
         return gameService.getGameById(id)
-                .map(game -> new ResponseEntity<>(game, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .map(game -> new ResponseEntity<>(
+                        new FormatResponse<>(null, game),
+                        HttpStatus.OK))
+                .orElse(new ResponseEntity<>(new FormatResponse<>(
+                        HttpStatus.NOT_FOUND.toString(),
+                        null), HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Game> saveGame(@RequestBody Game game) {
-        return new ResponseEntity<>(gameService.saveGame(game), HttpStatus.CREATED);
+    @ApiOperation("authentication for register users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+    public ResponseEntity<FormatResponse<Game>> saveGame(@RequestBody Game game) {
+        try {
+            return new ResponseEntity<>(new FormatResponse<>(null, gameService.saveGame(game)), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new FormatResponse<>(HttpStatus.BAD_REQUEST.toString(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity removeGame(@PathVariable("id") Integer id) {
+    @ApiOperation("authentication for register users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+    public ResponseEntity<FormatResponse<String>> removeGame(@PathVariable("id") Integer id) {
         if (gameService.removeGame(id)) {
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(new FormatResponse<>(null, HttpStatus.OK.toString()), HttpStatus.OK);
         } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new FormatResponse<>(HttpStatus.NOT_FOUND.toString(), null), HttpStatus.NOT_FOUND);
         }
     }
 }

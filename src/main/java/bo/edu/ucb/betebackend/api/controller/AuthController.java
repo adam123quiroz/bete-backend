@@ -3,7 +3,9 @@ package bo.edu.ucb.betebackend.api.controller;
 import bo.edu.ucb.betebackend.api.security.JWTUtil;
 import bo.edu.ucb.betebackend.domain.dto.AuthenticationRequest;
 import bo.edu.ucb.betebackend.domain.dto.AuthenticationResponse;
+import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,29 +23,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     final private AuthenticationManager authenticationManager;
     final private BeteUserDetailsService userDetailsService;
-    final private PasswordEncoder passwordEncoder;
     final private JWTUtil jwtUtil;
 
-    public AuthController(AuthenticationManager authenticationManager, BeteUserDetailsService userDetailsService, PasswordEncoder passwordEncoder, JWTUtil jwtUtil) {
+    public AuthController(AuthenticationManager authenticationManager, BeteUserDetailsService userDetailsService, JWTUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> createToken(@RequestBody AuthenticationRequest request) {
+    @ApiOperation("authentication for registered users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<AuthenticationResponse>> createToken(@RequestBody AuthenticationRequest request) {
         try {
-            authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
             String jwt = jwtUtil.generateToken(userDetails);
-            return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
-        } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new FormatResponse<>(null, new AuthenticationResponse(jwt)), HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(new FormatResponse<>(HttpStatus.FORBIDDEN.toString(), null),HttpStatus.FORBIDDEN);
         }
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class BeteUserDetailsService implements UserDetailsService {
     final private IUserRepository userRepository;
@@ -23,9 +25,8 @@ public class BeteUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository
-                .getByUsername(username)
+                .getGameByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
-//        return new User("admin", "{noop}bete", new ArrayList<>());
     }
 
     public User registerNewUserAccount(RegistrationUserForm newUser, PasswordEncoder passwordEncoder) {
@@ -39,4 +40,11 @@ public class BeteUserDetailsService implements UserDetailsService {
         return user;
     }
 
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public Optional<User> getGameById(Integer id) {
+        return userRepository.getGameById(id);
+    }
 }

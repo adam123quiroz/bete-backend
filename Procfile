@@ -1,0 +1,1 @@
+web: java -jar -D spring.profiles.active=pdn build/libs/bete-backend-1.0.jar
