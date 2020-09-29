@@ -5,7 +5,6 @@ import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
 import bo.edu.ucb.betebackend.domain.dto.RegistrationUserForm;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpEntity;
@@ -48,7 +47,6 @@ public class UserController {
             @ApiResponse(code = 400, message = "not found"),
     })
     public HttpEntity<FormatResponse<User>> patchOrder(
-            @ApiParam(name = "userId", required = true)
             @PathVariable("userId") Integer id,
             @RequestBody User patch) {
         try {
@@ -78,6 +76,11 @@ public class UserController {
     }
 
     @PatchMapping("/role-update/{idUser}")
+    @ApiOperation("Registration for new users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
     public ResponseEntity<FormatResponse<User>> updateRolesUser(
             @PathVariable("idUser") Integer idUser,
             @RequestBody User user) {

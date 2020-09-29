@@ -37,7 +37,8 @@ public class AuthController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    public ResponseEntity<FormatResponse<AuthenticationResponse>> createToken(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<FormatResponse<AuthenticationResponse>> createToken(
+            @RequestBody AuthenticationRequest request) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());

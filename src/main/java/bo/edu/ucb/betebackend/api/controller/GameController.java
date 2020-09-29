@@ -23,7 +23,6 @@ public class GameController {
     @GetMapping("/all")
     @ApiOperation("get all the games available")
     @ApiResponse(code = 200, message = "OK")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<FormatResponse<List<Game>>> getAllGames() {
         return new ResponseEntity<>(new FormatResponse<>(null,
                 gameService
@@ -38,8 +37,8 @@ public class GameController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-    public ResponseEntity<FormatResponse<Game>> getGameById(@PathVariable("id") Integer id) {
+    public ResponseEntity<FormatResponse<Game>> getGameById(
+            @PathVariable("id") Integer id) {
         return gameService.getGameById(id)
                 .map(game -> new ResponseEntity<>(
                         new FormatResponse<>(null, game),
@@ -55,8 +54,8 @@ public class GameController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-    public ResponseEntity<FormatResponse<Game>> saveGame(@RequestBody Game game) {
+    public ResponseEntity<FormatResponse<Game>> saveGame(
+            @RequestBody Game game) {
         try {
             return new ResponseEntity<>(new FormatResponse<>(null, gameService.saveGame(game)), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -70,8 +69,8 @@ public class GameController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-    public ResponseEntity<FormatResponse<String>> removeGame(@PathVariable("id") Integer id) {
+    public ResponseEntity<FormatResponse<String>> removeGame(
+            @PathVariable("id") Integer id) {
         if (gameService.removeGame(id)) {
             return new ResponseEntity<>(new FormatResponse<>(null, HttpStatus.OK.toString()), HttpStatus.OK);
         } else {
