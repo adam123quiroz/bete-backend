@@ -24,8 +24,17 @@ public interface UserMapper {
             @Mapping(source = "reviewEntityList", target = "reviewList"),
             @Mapping(source = "gamblerEntityList", target = "gamblerList"),
     })*/
+    @Mapping(target = "region", ignore = true)
     User toUser(BeteUserEntity userEntity);
 
     @InheritInverseConfiguration
+    @Mappings({
+            @Mapping(target = "userTeamEntityList", ignore = true),
+            @Mapping(target = "region", ignore = true),
+            @Mapping(target = "notificationEntityList", ignore = true),
+            @Mapping(target = "organizerEntityList", ignore = true),
+            @Mapping(target = "reviewEntityList", ignore = true),
+            @Mapping(target = "gamblerEntityList", ignore = true),
+    })
     BeteUserEntity toUserEntity(User user);
 }

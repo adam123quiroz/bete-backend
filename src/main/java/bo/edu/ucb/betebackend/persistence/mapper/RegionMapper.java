@@ -19,5 +19,6 @@ public interface RegionMapper {
 
     @InheritInverseConfiguration
     @Mapping(target = "status", ignore = true)
+    @Mapping(target = "beteUserEntityList", ignore = true)
     RegionEntity toRegionEntity(Region region);
 }

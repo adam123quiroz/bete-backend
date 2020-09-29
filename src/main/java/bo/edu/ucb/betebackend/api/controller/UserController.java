@@ -94,6 +94,16 @@ public class UserController {
         }
     }
 
+    @PatchMapping("/updatePassword")
+    @ApiOperation("Updating password from users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<User>> changeUserPassword() {
+        return null;
+    }
+
     @PatchMapping("/role-update/{idUser}")
     @ApiOperation("Registration for new users")
     @ApiResponses({
