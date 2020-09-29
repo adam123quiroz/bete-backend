@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/user")
 public class UserController {
     final private BeteUserDetailsService userDetailsService;
@@ -24,6 +25,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @CrossOrigin
     @GetMapping("/{idUser}")
     @ApiOperation("Get user by Id")
     @ApiResponses({
@@ -43,6 +45,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin
     @PostMapping("/registration")
     @ApiOperation("Registration for new users")
     @ApiResponses({
@@ -59,6 +62,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin
     @PatchMapping("/{userId}")
     @ApiOperation("Registration for new users")
     @ApiResponses({
@@ -94,6 +98,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin
     @PatchMapping("/updatePassword")
     @ApiOperation("Updating password from users")
     @ApiResponses({
@@ -104,6 +109,7 @@ public class UserController {
         return null;
     }
 
+    @CrossOrigin
     @PatchMapping("/role-update/{idUser}")
     @ApiOperation("Registration for new users")
     @ApiResponses({

@@ -5,6 +5,7 @@ import bo.edu.ucb.betebackend.domain.service.BetService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/bet")
 public class BetController {
     final private BetService betService;
@@ -22,6 +24,7 @@ public class BetController {
         this.betService = betService;
     }
 
+    @CrossOrigin
     @GetMapping("/all")
     @ApiOperation("Registration for new users")
     @ApiResponses({

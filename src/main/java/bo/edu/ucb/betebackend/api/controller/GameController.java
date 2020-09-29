@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/game")
 public class GameController {
     final private GameService gameService;
@@ -20,6 +21,7 @@ public class GameController {
         this.gameService = gameService;
     }
 
+    @CrossOrigin
     @GetMapping("/all")
     @ApiOperation("get all the games available")
     @ApiResponse(code = 200, message = "OK")
@@ -31,6 +33,7 @@ public class GameController {
                 HttpStatus.OK);
     }
 
+    @CrossOrigin
     @GetMapping("/{id}")
     @ApiOperation("authentication for register users")
     @ApiResponses({
@@ -48,6 +51,7 @@ public class GameController {
                         null), HttpStatus.NOT_FOUND));
     }
 
+    @CrossOrigin
     @PostMapping("/save")
     @ApiOperation("authentication for register users")
     @ApiResponses({
@@ -63,6 +67,7 @@ public class GameController {
         }
     }
 
+    @CrossOrigin
     @DeleteMapping("/delete/{id}")
     @ApiOperation("authentication for register users")
     @ApiResponses({
