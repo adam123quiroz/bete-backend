@@ -19,12 +19,12 @@ public class UserDao implements IUserRepository {
     }
 
     @Override
-    public Optional<User> getGameByUsername(String username) {
+    public Optional<User> getUserByUsername(String username) {
         return Optional.ofNullable(userMapper.toUser(userRepository.findByUsername(username)));
     }
 
     @Override
-    public Optional<User> getGameById(Integer id) {
+    public Optional<User> getUserById(Integer id) {
         return userRepository.findById(id).map(userMapper::toUser);
     }
 

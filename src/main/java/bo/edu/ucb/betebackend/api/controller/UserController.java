@@ -24,6 +24,25 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @GetMapping("/{idUser}")
+    @ApiOperation("Get user by Id")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<User>> getUserById(
+            @PathVariable("idUser") Integer idUser) {
+        try {
+            User user = userDetailsService.getUserById(idUser).orElseThrow(Exception::new);
+            return new ResponseEntity<>(new FormatResponse<>(null, user), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(new FormatResponse<>(
+                    HttpStatus.BAD_REQUEST.toString(), null),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/registration")
     @ApiOperation("Registration for new users")
     @ApiResponses({
@@ -50,7 +69,7 @@ public class UserController {
             @PathVariable("userId") Integer id,
             @RequestBody User patch) {
         try {
-            User user = userDetailsService.getGameById(id).orElseThrow(Exception::new);
+            User user = userDetailsService.getUserById(id).orElseThrow(Exception::new);
             if (patch.getUsername() != null) {
                 user.setUsername(patch.getUsername());
             }

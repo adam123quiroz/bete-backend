@@ -25,7 +25,7 @@ public class BeteUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository
-                .getGameByUsername(username)
+                .getUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
     }
 
@@ -44,7 +44,7 @@ public class BeteUserDetailsService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public Optional<User> getGameById(Integer id) {
-        return userRepository.getGameById(id);
+    public Optional<User> getUserById(Integer id) {
+        return userRepository.getUserById(id);
     }
 }
