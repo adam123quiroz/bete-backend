@@ -7,19 +7,19 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-@Mapper(componentModel = "spring", uses = {
-        UserMapper.class,
-        TournamentMapper.class,
-        ReviewMapper.class
-})
+import java.util.List;
+
+@Mapper(componentModel = "spring")
 public interface OrganizerMapper {
-    @Mappings({
-            @Mapping(source = "tournamentEntityList", target = "tournamentList"),
-            @Mapping(source = "reviewEntityList", target = "reviewList")
-    })
+
     Organizer toOrganizer(OrganizerEntity organizerEntity);
+    List<Organizer> toOrganizerList(List<OrganizerEntity> organizerEntities);
 
     @InheritInverseConfiguration
-    @Mapping(target = "status", ignore = true)
+    @Mappings({
+            @Mapping(target = "status", ignore = true),
+            @Mapping(target = "tournamentEntityList", ignore = true),
+            @Mapping(target = "reviewEntityList", ignore = true),
+    })
     OrganizerEntity toOrganizerEntity(Organizer organizer);
 }

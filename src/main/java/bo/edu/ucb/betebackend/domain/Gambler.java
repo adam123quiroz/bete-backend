@@ -6,8 +6,18 @@ public class Gambler {
     private Integer idGambler;
     private String bankCard;
     private int coins;
-    private List<Bet> betList;
+//    private List<Bet> betList;
     private User idUser;
+
+    public Gambler(Integer idGambler, String bankCard, int coins, User idUser) {
+        this.idGambler = idGambler;
+        this.bankCard = bankCard;
+        this.coins = coins;
+        this.idUser = idUser;
+    }
+
+    public Gambler() {
+    }
 
     public Integer getIdGambler() {
         return idGambler;
@@ -33,14 +43,14 @@ public class Gambler {
         this.coins = coins;
     }
 
-    public List<Bet> getBetList() {
+    /*public List<Bet> getBetList() {
         return betList;
     }
 
     public void setBetList(List<Bet> betList) {
         this.betList = betList;
     }
-
+*/
     public User getIdUser() {
         return idUser;
     }

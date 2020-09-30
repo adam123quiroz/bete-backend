@@ -6,10 +6,19 @@ public class Organizer {
     private Integer idOrganizer;
     private String bankCard;
     private float reputation;
-    private List<Tournament> tournamentList;
     private User idUser;
-    private List<Review> reviewList;
+    /*private List<Tournament> tournamentList;
+    private List<Review> reviewList;*/
 
+    public Organizer(Integer idOrganizer, String bankCard, float reputation, User idUser) {
+        this.idOrganizer = idOrganizer;
+        this.bankCard = bankCard;
+        this.reputation = reputation;
+        this.idUser = idUser;
+    }
+
+    public Organizer() {
+    }
 
     public Integer getIdOrganizer() {
         return idOrganizer;
@@ -43,7 +52,7 @@ public class Organizer {
         this.idUser = idUser;
     }
 
-    public List<Tournament> getTournamentList() {
+/*    public List<Tournament> getTournamentList() {
         return tournamentList;
     }
 
@@ -57,5 +66,5 @@ public class Organizer {
 
     public void setReviewList(List<Review> reviewList) {
         this.reviewList = reviewList;
-    }
+    }*/
 }

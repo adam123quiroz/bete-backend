@@ -1,6 +1,8 @@
 package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.domain.User;
+import bo.edu.ucb.betebackend.domain.dto.ChangePasswordRequest;
+import bo.edu.ucb.betebackend.domain.dto.ChangeRoleUserRequest;
 import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
 import bo.edu.ucb.betebackend.domain.dto.RegistrationUserForm;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
@@ -74,7 +76,7 @@ public class UserController {
             @RequestBody User patch) {
         try {
             User user = userDetailsService.getUserById(id).orElseThrow(Exception::new);
-            if (patch.getUsername() != null) {
+            if (patch.getUsername() != null ) {
                 user.setUsername(patch.getUsername());
             }
             if (patch.getEmail() != null) {
@@ -99,18 +101,32 @@ public class UserController {
     }
 
     @CrossOrigin
-    @PatchMapping("/updatePassword")
+    @PatchMapping("/{idUser}/update-password")
     @ApiOperation("Updating password from users")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    public ResponseEntity<FormatResponse<User>> changeUserPassword() {
-        return null;
+    public ResponseEntity<FormatResponse<User>> changeUserPassword(
+            @PathVariable("idUser") Integer idUser,
+            @RequestBody ChangePasswordRequest changePasswordRequest
+    ) {
+        try {
+            User user = userDetailsService.getUserById(idUser).orElseThrow(Exception::new);
+            if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+                throw new Exception();
+            }
+            String newPassword = changePasswordRequest.getNewPassword();
+            User userWithNewPassword = userDetailsService.changePassword(user, newPassword, passwordEncoder);
+            return new ResponseEntity<>(new FormatResponse<>(null, userWithNewPassword), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new FormatResponse<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @CrossOrigin
-    @PatchMapping("/role-update/{idUser}")
+    @PatchMapping("/{idUser}/role-update")
     @ApiOperation("Registration for new users")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
@@ -118,7 +134,15 @@ public class UserController {
     })
     public ResponseEntity<FormatResponse<User>> updateRolesUser(
             @PathVariable("idUser") Integer idUser,
-            @RequestBody User user) {
-        return null;
+            @RequestBody ChangeRoleUserRequest userRequest) {
+        try {
+            User user = userDetailsService.getUserById(idUser).orElseThrow(Exception::new);
+            User userNewRole = userDetailsService.changeUserRole(userRequest, user);
+            return new ResponseEntity<>(new FormatResponse<>(null, userNewRole), HttpStatus.OK);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new FormatResponse<>(HttpStatus.BAD_REQUEST.toString(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 }
