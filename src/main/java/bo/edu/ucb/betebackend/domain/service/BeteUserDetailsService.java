@@ -35,7 +35,7 @@ public class BeteUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository
                 .getUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
@@ -82,7 +82,6 @@ public class BeteUserDetailsService implements UserDetailsService {
         }
         return user;
     }
-
     public Optional<User> getUserById(Integer id) {
         return userRepository.getUserById(id);
     }
