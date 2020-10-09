@@ -1,7 +1,6 @@
 package bo.edu.ucb.betebackend.api.security;
 
 import bo.edu.ucb.betebackend.api.security.filter.JwtFilter;
-import bo.edu.ucb.betebackend.api.security.filter.LoginFilter;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
