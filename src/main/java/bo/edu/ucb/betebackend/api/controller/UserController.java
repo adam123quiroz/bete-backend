@@ -9,6 +9,8 @@ import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     final private BeteUserDetailsService userDetailsService;
     final private PasswordEncoder passwordEncoder;
+    final static Logger logger = LoggerFactory.getLogger(UserController.class);
+
 
     public UserController(BeteUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
@@ -38,9 +42,8 @@ public class UserController {
             @PathVariable("idUser") Integer idUser) {
         try {
             User user = userDetailsService.getUserById(idUser).orElseThrow(Exception::new);
-            return new ResponseEntity<>(new FormatResponse<>(null, user), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new FormatResponse<>(null, user), HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return new ResponseEntity<>(new FormatResponse<>(
                     HttpStatus.BAD_REQUEST.toString(), null),
                     HttpStatus.BAD_REQUEST);

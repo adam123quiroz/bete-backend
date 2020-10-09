@@ -1,6 +1,7 @@
 package bo.edu.ucb.betebackend.api.security;
 
-import bo.edu.ucb.betebackend.api.security.filter.JwtFilterRequest;
+import bo.edu.ucb.betebackend.api.security.filter.JwtFilter;
+import bo.edu.ucb.betebackend.api.security.filter.LoginFilter;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     final private BeteUserDetailsService userDetailsService;
-    final private JwtFilterRequest jwt;
+    final private JwtFilter jwt;
 
-    public SecurityConfig(BeteUserDetailsService userDetailsService, JwtFilterRequest jwt) {
+    public SecurityConfig(BeteUserDetailsService userDetailsService, JwtFilter jwt) {
         this.userDetailsService = userDetailsService;
         this.jwt = jwt;
     }
@@ -41,16 +42,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**/authenticate", "/user/registration", "/payment/get-paypal-transaction").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                /*.and()
-                .formLogin().loginPage("/login").loginProcessingUrl("/auth/authenticate");*/
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
 
-        http
-                .addFilterBefore(jwt, UsernamePasswordAuthenticationFilter.class);
+//                .addFilterBefore(new LoginFilter("/auth/authenticate", authenticationManager()),
+//                        UsernamePasswordAuthenticationFilter.class)
+                // Las demás peticiones pasarán por este filtro para validar el token
+                .addFilterBefore(jwt,
+                        UsernamePasswordAuthenticationFilter.class);
+
+
+
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui",
                 "/swagger-resources/**", "/configuration/security",
                 "/swagger-ui.html", "/webjars/**");
