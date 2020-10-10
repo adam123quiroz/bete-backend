@@ -18,17 +18,16 @@ public class JwtSecondUtil {
     public static String KEYSECRET = "laclavesecretsdfdsfdsfdsfdsfdsfsdfdsfdsfdsfdsfdsfsdfsdfdsfsdfdsfdsfsdfdsfdsfdsfdsfdsfdsfdsfa";
 
     // Metodo para crear el JWT y enviarlo al cliente en el header de la respuesta
-    public static void addAuthentication(HttpServletResponse res, String username) {
+    public static String addAuthentication(String username) {
 
-        String token = Jwts.builder()
+        //agregamos al encabezado el token
+        return Jwts.builder()
                 .setSubject(username)
                 // Vamos a asignar un tiempo de expiracion de 12 horas
                 .setExpiration(new Date(System.currentTimeMillis() + 43200000))
                 // Hash con el que firmaremos la clave
                 .signWith(SignatureAlgorithm.HS512, KEYSECRET)
                 .compact();
-        //agregamos al encabezado el token
-        res.addHeader("Authorization", token);
     }
 
     // Metodo para validar el token enviado por el cliente

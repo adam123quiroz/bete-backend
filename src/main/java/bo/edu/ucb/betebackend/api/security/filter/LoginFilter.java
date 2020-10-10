@@ -34,6 +34,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
         // Asumimos que el body tendra el siguiente JSON  {"username":"xxxx", "password":"xxxx"}
         // Realizamos un mapeo a nuestra clase User para tener ahi los datos
+        logger.info("KK " + body.toString());
         User user = new ObjectMapper().readValue(body, User.class);
 
         // Finalmente autenticamos
@@ -80,7 +81,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setHeader("Access-Control-Allow-Headers", "Accept, Content-Type, Origin, Authorization, X-Auth-Token");
 
         // Si la autenticacion fue exitosa, agregamos el token a la respuesta
-        JwtSecondUtil.addAuthentication(response, auth.getName());
+//        JwtSecondUtil.addAuthentication(response, auth.getName());
 
         logger.info("MRASDJSAJKDNSBKDJUSHN");
     }

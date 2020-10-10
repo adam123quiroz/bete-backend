@@ -37,6 +37,7 @@ public class JwtFilter extends GenericFilterBean {
         // Obtenemos el token que viene en el encabezado de la peticion
         String authorizationHeader = ((HttpServletRequest) request).getHeader("Authorization");
         UserDetails userDetails = null;
+        logger.info(authorizationHeader);
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
             String jwt = authorizationHeader.substring(7);
@@ -55,7 +56,7 @@ public class JwtFilter extends GenericFilterBean {
 
         HttpServletResponse res;
         res = (HttpServletResponse) response;
-//        String clientOrigin = ((HttpServletRequest) request).getHeader("origin");
+        String clientOrigin = ((HttpServletRequest) request).getHeader("origin");
 //        res.addHeader("Access-Control-Allow-Origin", clientOrigin);
         res.setHeader("Access-Control-Allow-Methods", "POST, PATCH, GET,  DELETE, PUT");
         res.setHeader("Access-Control-Allow-Credentials", "true");

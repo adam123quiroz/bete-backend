@@ -41,6 +41,7 @@ public class UserController {
     public ResponseEntity<FormatResponse<User>> getUserById(
             @PathVariable("idUser") Integer idUser) {
         try {
+            logger.info(idUser.toString());
             User user = userDetailsService.getUserById(idUser).orElseThrow(Exception::new);
             return new ResponseEntity<>(new FormatResponse<>(null, user), HttpStatus.OK);
         } catch (Exception e) {

@@ -1,6 +1,6 @@
 package bo.edu.ucb.betebackend.api.controller;
 
-import bo.edu.ucb.betebackend.api.security.JWTUtil;
+import bo.edu.ucb.betebackend.api.security.JwtSecondUtil;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.dto.AuthenticationRequest;
 import bo.edu.ucb.betebackend.domain.dto.AuthenticationResponse;
@@ -19,12 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     final private AuthenticationManager authenticationManager;
     final private BeteUserDetailsService userDetailsService;
-    final private JWTUtil jwtUtil;
 
-    public AuthController(AuthenticationManager authenticationManager, BeteUserDetailsService userDetailsService, JWTUtil jwtUtil) {
+    public AuthController(AuthenticationManager authenticationManager, BeteUserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
-        this.jwtUtil = jwtUtil;
     }
 
     @CrossOrigin
@@ -39,7 +37,7 @@ public class AuthController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             User user = userDetailsService.loadUserByUsername(request.getUsername());
-            String jwt = jwtUtil.generateToken(user);
+            String jwt = JwtSecondUtil.addAuthentication(user.getUsername());
             return new ResponseEntity<>(new FormatResponse<>(null, new AuthenticationResponse(jwt, user)), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -1,5 +1,6 @@
 package bo.edu.ucb.betebackend.api.security;
 
+import bo.edu.ucb.betebackend.api.security.filter.CorsFilter;
 import bo.edu.ucb.betebackend.api.security.filter.JwtFilter;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 @EnableWebSecurity
@@ -44,14 +47,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
-//                .addFilterBefore(new LoginFilter("/auth/authenticate", authenticationManager()),
-//                        UsernamePasswordAuthenticationFilter.class)
-                // Las demás peticiones pasarán por este filtro para validar el token
+/*                .addFilterBefore(new LoginFilter("/auth/authenticate", authenticationManager()),
+                        UsernamePasswordAuthenticationFilter.class)*/
+//                 Las demás peticiones pasarán por este filtro para validar el token
                 .addFilterBefore(jwt,
-                        UsernamePasswordAuthenticationFilter.class);
-
-
-
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class);
     }
 
     @Override
