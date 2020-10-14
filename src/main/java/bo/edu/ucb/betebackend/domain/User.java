@@ -26,6 +26,27 @@ public class User implements UserDetails {
 //    private List<Gambler> gamblerList;
     private Region region;
 
+    public User(Integer idUser, String username, String email, String name, String lastname, int countryCode,
+                int cellphoneNumber, int isPlayer, int isOrganizer, int isGambler, String password,
+                int status, Region region) {
+        this.idUser = idUser;
+        this.username = username;
+        this.email = email;
+        this.name = name;
+        this.lastname = lastname;
+        this.countryCode = countryCode;
+        this.cellphoneNumber = cellphoneNumber;
+        this.isPlayer = isPlayer;
+        this.isOrganizer = isOrganizer;
+        this.isGambler = isGambler;
+        this.password = password;
+        this.status = status;
+        this.region = region;
+    }
+
+    public User() {
+    }
+
     public Integer getIdUser() {
         return idUser;
     }

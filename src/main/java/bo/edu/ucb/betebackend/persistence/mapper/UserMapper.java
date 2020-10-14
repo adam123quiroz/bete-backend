@@ -7,14 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = {
-        RegionMapper.class,
-        TeamMapper.class,
-        UserTeamMapper.class,
-        NotificationMapper.class,
-        OrganizerMapper.class,
-        ReviewMapper.class,
-        GamblerMapper.class
+        RegionMapper.class
 })
 public interface UserMapper {
 /*    @Mappings({
@@ -25,6 +21,7 @@ public interface UserMapper {
             @Mapping(source = "gamblerEntityList", target = "gamblerList"),
     })*/
     User toUser(BeteUserEntity userEntity);
+    List<User> toListUser(List<BeteUserEntity> userEntities);
 
     @InheritInverseConfiguration
     @Mappings({

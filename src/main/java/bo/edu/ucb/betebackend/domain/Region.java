@@ -7,6 +7,15 @@ public class Region {
     private String regionName;
 //    List<User> userList;
 
+
+    public Region(Integer idRegion, String regionName) {
+        this.idRegion = idRegion;
+        this.regionName = regionName;
+    }
+
+    public Region() {
+    }
+
     public Integer getIdRegion() {
         return idRegion;
     }

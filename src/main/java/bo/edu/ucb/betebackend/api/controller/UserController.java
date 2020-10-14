@@ -75,7 +75,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    public HttpEntity<FormatResponse<User>> patchOrder(
+    public HttpEntity<FormatResponse<User>> patchUser(
             @PathVariable("userId") Integer id,
             @RequestBody User patch) {
         try {
@@ -88,15 +88,6 @@ public class UserController {
             }
             if (patch.getCellphoneNumber() != 0) {
                 user.setCellphoneNumber(patch.getCellphoneNumber());
-            }
-            if (patch.getIsPlayer() != -1) {
-                user.setIsPlayer(patch.getIsPlayer());
-            }
-            if (patch.getIsOrganizer() != -1) {
-                user.setIsOrganizer(patch.getIsOrganizer());
-            }
-            if (patch.getIsGambler() != -1) {
-                user.setIsGambler(patch.getIsGambler());
             }
             return new ResponseEntity<>(new FormatResponse<>(null, user), HttpStatus.OK);
         } catch (Exception e) {

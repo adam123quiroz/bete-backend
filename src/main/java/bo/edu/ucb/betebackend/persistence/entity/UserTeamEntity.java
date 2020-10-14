@@ -46,7 +46,7 @@ public class UserTeamEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "status")
     private int status;
-    @JoinColumn(name = "user", referencedColumnName = "id_user")
+    @JoinColumn(name = "bete_user", referencedColumnName = "id_user")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private BeteUserEntity user;
     @JoinColumn(name = "team", referencedColumnName = "id_team")

@@ -1,17 +1,28 @@
 package bo.edu.ucb.betebackend.domain;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Team {
     private Integer idTeam;
     private String teamName;
     private String organization;
     private int status;
-    private List<TournamentTeam> tournamentTeamList;
+    /*private List<TournamentTeam> tournamentTeamList;
     private List<Match> matchList;
     private List<Match> matchList1;
-    private List<UserTeam> userTeamList;
-    private List<Bet> betList;
+    private List<Bet> betList;*/
+//    private List<UserTeam> userTeamList;
+
+    public Team(Integer idTeam, String teamName, String organization, int status) {
+        this.idTeam = idTeam;
+        this.teamName = teamName;
+        this.organization = organization;
+        this.status = status;
+    }
+
+    public Team() {
+    }
 
     public Integer getIdTeam() {
         return idTeam;
@@ -45,7 +56,7 @@ public class Team {
         this.status = status;
     }
 
-    public List<TournamentTeam> getTournamentTeamList() {
+    /* public List<TournamentTeam> getTournamentTeamList() {
         return tournamentTeamList;
     }
 
@@ -69,13 +80,6 @@ public class Team {
         this.matchList1 = matchList1;
     }
 
-    public List<UserTeam> getUserTeamList() {
-        return userTeamList;
-    }
-
-    public void setUserTeamList(List<UserTeam> userTeamList) {
-        this.userTeamList = userTeamList;
-    }
 
     public List<Bet> getBetList() {
         return betList;
@@ -83,5 +87,28 @@ public class Team {
 
     public void setBetList(List<Bet> betList) {
         this.betList = betList;
+    }*/
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Team team = (Team) o;
+        return status == team.status &&
+                Objects.equals(idTeam, team.idTeam) &&
+                Objects.equals(teamName, team.teamName) &&
+                Objects.equals(organization, team.organization);
     }
+
+//    public List<UserTeam> getUserTeamList() {
+//        return userTeamList;
+//    }
+//
+//    public void setUserTeamList(List<UserTeam> userTeamList) {
+//        this.userTeamList = userTeamList;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(idTeam, teamName, organization, status);
+//    }
 }

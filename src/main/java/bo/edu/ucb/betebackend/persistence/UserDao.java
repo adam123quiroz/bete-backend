@@ -3,9 +3,11 @@ package bo.edu.ucb.betebackend.persistence;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.repository.IUserRepository;
 import bo.edu.ucb.betebackend.persistence.dao.UserRepository;
+import bo.edu.ucb.betebackend.persistence.entity.BeteUserEntity;
 import bo.edu.ucb.betebackend.persistence.mapper.UserMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,6 +28,12 @@ public class UserDao implements IUserRepository {
     @Override
     public Optional<User> getUserById(Integer id) {
         return userRepository.findById(id).map(userMapper::toUser);
+    }
+
+    @Override
+    public Optional<List<User>> getAllUsers() {
+        List<BeteUserEntity> userEntities = userRepository.findAll();
+        return Optional.ofNullable(userMapper.toListUser(userEntities));
     }
 
     @Override

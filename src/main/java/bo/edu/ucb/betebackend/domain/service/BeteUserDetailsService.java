@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -57,32 +59,41 @@ public class BeteUserDetailsService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
-
     public User changeUserRole(ChangeRoleUserRequest changeRoleUserRequest, User user) {
         Integer role = changeRoleUserRequest.getTypeOf();
         String bankCard = changeRoleUserRequest.getPayment();
         if (role == TypeOfUsers.Gambler.getStatus()) {
-            user.setIsGambler(1);
-            Gambler gambler = new Gambler();
-            gambler.setBankCard(bankCard);
-            gambler.setCoins(0);
-            gambler.setIdUser(user);
-            gamblerRepository.saveGambler(gambler);
+            initGambler(user, bankCard);
         }
         if (role == TypeOfUsers.Organizer.getStatus()) {
-            user.setIsOrganizer(1);
-            Organizer organizer = new Organizer();
-            organizer.setBankCard(bankCard);
-            organizer.setReputation(0);
-            organizer.setIdUser(user);
-            organizerRepository.saveOrganizer(organizer);
+            initOrganizer(user, bankCard);
         }
         return user;
     }
+
+    private void initOrganizer(User user, String bankCard) {
+        user.setIsOrganizer(1);
+        Organizer organizer = new Organizer();
+        organizer.setBankCard(bankCard);
+        organizer.setReputation(0);
+        organizer.setIdUser(user);
+        organizerRepository.saveOrganizer(organizer);
+    }
+
+    private void initGambler(User user, String bankCard) {
+        user.setIsGambler(1);
+        Gambler gambler = new Gambler();
+        gambler.setBankCard(bankCard);
+        gambler.setCoins(0);
+        gambler.setIdUser(user);
+        gamblerRepository.saveGambler(gambler);
+    }
+
     public Optional<User> getUserById(Integer id) {
         return userRepository.getUserById(id);
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.getAllUsers().orElse(Collections.emptyList());
     }
 }

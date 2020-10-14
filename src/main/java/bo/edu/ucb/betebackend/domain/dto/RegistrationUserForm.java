@@ -24,6 +24,9 @@ public class RegistrationUserForm {
         this.cellphoneNumber = cellphoneNumber;
     }
 
+    public RegistrationUserForm() {
+    }
+
     public User toUser(PasswordEncoder passwordEncoder) {
         User user = new User();
         user.setUsername(username);
