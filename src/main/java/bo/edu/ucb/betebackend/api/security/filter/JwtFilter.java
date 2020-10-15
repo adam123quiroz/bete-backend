@@ -37,7 +37,6 @@ public class JwtFilter extends GenericFilterBean {
         // Obtenemos el token que viene en el encabezado de la peticion
         String authorizationHeader = ((HttpServletRequest) request).getHeader("Authorization");
         UserDetails userDetails = null;
-        logger.info(authorizationHeader);
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
             String jwt = authorizationHeader.substring(7);

@@ -6,7 +6,6 @@ import bo.edu.ucb.betebackend.domain.UserTeam;
 import bo.edu.ucb.betebackend.domain.dto.TeamAndUserByCapitanResponse;
 import bo.edu.ucb.betebackend.domain.repository.IUserTeamRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserTeamServiceTest {
     final static Logger logger = LoggerFactory.getLogger(UserTeamServiceTest.class);
-
 
     @Autowired
     UserTeamService userTeamService;
@@ -134,8 +132,6 @@ class UserTeamServiceTest {
         team.setStatus(1);
 
         userTeamService.changeCapitan(team, 5,1);
-
-
     }
 
 }

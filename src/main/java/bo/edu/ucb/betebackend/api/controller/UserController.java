@@ -17,6 +17,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+
 @RestController
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/user")
@@ -24,7 +29,6 @@ public class UserController {
     final private BeteUserDetailsService userDetailsService;
     final private PasswordEncoder passwordEncoder;
     final static Logger logger = LoggerFactory.getLogger(UserController.class);
-
 
     public UserController(BeteUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
@@ -52,6 +56,20 @@ public class UserController {
     }
 
     @CrossOrigin
+    @GetMapping("/all")
+    @ApiOperation("get all users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<List<User>>> getAllUsers() {
+        List<User> users = userDetailsService.findAllUsers();
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(null, users));
+    }
+
+    @CrossOrigin
     @PostMapping("/registration")
     @ApiOperation("Registration for new users")
     @ApiResponses({
@@ -62,7 +80,7 @@ public class UserController {
             @RequestBody RegistrationUserForm form) {
         try {
             User user = userDetailsService.registerNewUserAccount(form, passwordEncoder);
-            return new ResponseEntity<>(new FormatResponse<>(null, user), HttpStatus.OK);
+            return new ResponseEntity<>(new FormatResponse<>(null, user), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new FormatResponse<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
