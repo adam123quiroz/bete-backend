@@ -33,7 +33,7 @@ public class UserTeamService {
     }
 
     public List<UserTeam> getAllTeamUserByUserAndNotAnswer(User user) {
-        List<UserTeam> userTeamsByUserList = userTeamRepository.getAllByUser(user);
+        List<UserTeam> userTeamsByUserList = userTeamRepository.getAllByUser(user).get();
         return userTeamsByUserList
                 .stream()
                 .filter(userTeam -> userTeam.getIsCaptain() == TypeOfIsCapitanUserTeam.NotAnswer.getStatus())
@@ -51,7 +51,7 @@ public class UserTeamService {
         List<UserTeam> userTeamsByUserList = userTeamRepository.getAllByUserAndIsCapitan(
                 user,
                 TypeOfIsCapitanUserTeam.TheCapitan.getStatus()
-        );
+        ).get();
         userTeamsByUserList
                 .stream()
                 .map(UserTeam::getTeam)
@@ -111,6 +111,6 @@ public class UserTeamService {
     }
 
     public List<UserTeam> getAllUserTeamByTeam(Team team) {
-        return userTeamRepository.getAllByTeam(team);
+        return userTeamRepository.getAllByTeam(team).get();
     }
 }

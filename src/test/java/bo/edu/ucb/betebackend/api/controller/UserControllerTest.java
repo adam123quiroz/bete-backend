@@ -1,5 +1,6 @@
 package bo.edu.ucb.betebackend.api.controller;
 
+import bo.edu.ucb.betebackend.api.exception.RegionNotFoundException;
 import bo.edu.ucb.betebackend.domain.Region;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.dto.ChangePasswordRequest;
@@ -16,7 +17,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -74,6 +74,24 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("Test giving a bad path id user - GET /user/qwe")
+    void givenIdUserPathInvalid_whenGetUserId_thenReturnStatusBadRequest() throws Exception {
+        // Prepare mock users
+        Region region = new Region(1, "North America");
+        User user = new User(2, "adam", "adam@example.com", "Adam", "Quiroz",
+                1, 75258550, 1, 0, 0, "adam1234", 1, region);
+
+        //Prepare mock service method
+        Mockito.when(userDetailsService.getUserById(2)).thenReturn(Optional.of(user));
+
+        //Validate GET request
+        mockMvc.perform(get("/user/{idUser}", "qwe"))
+                //Validate 200 Ok and JSON response type received
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").isNotEmpty());
+    }
+
+    @Test
     @DisplayName("Test all users found - GET /user/all")
     void whenGetAllUsers_thenReturnJsonListUsers() throws Exception {
         //Prepare mock users
@@ -102,6 +120,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("Test save a new user - POST user/registration")
     void givenUserForm_whenPostUser_thenReturnJsonNewUser() throws Exception {
         //Prepare mock user
         RegistrationUserForm form = new RegistrationUserForm();
@@ -139,26 +158,124 @@ class UserControllerTest {
     }
 
     @Test
-    void givenIdUserPathAndUser_whenPatchUser_thenReturnJsonUserModified() throws Exception {
-        //Prepare mock user
-        User userModified = new User();
-        userModified.setUsername("adam1234quiroz");
+    @DisplayName("Test giving a bad request - POST /user/registration")
+    void givenBadRequest_whenPostUser_thenStatusBadRequest() throws Exception {
+        RegistrationUserForm registrationUserForm = new RegistrationUserForm();
+        registrationUserForm.setUsername("adam");
 
-        //Prepare mock service method
-        mockMvc.perform(patch("/user/all")
-                .content(new ObjectMapper().writeValueAsString(userModified))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+        //Validate POST request
+        mockMvc.perform(post("/user/registration")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(new ObjectMapper().writeValueAsString(registrationUserForm)))
 
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.response.username", is(userModified.getUsername())));
+                //Validate 400 Bad Request and JSON response type received
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").isNotEmpty());
     }
 
     @Test
-    void givenIdUserPathAndChangePasswordRequest_whenPatchUserPassword_thenReturnJsonUser() throws Exception {
-        int idUser = 2;
+    @DisplayName("Test giving a null request - POST /user/registration")
+    void givenNullRequest_whenPostUser_thenStatusBadRequest() throws Exception {
 
+        //Validate POST request
+        mockMvc.perform(post("/user/registration")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(new ObjectMapper().writeValueAsString(null)))
+
+                //Validate 400 Bad Request and JSON response type received
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").isNotEmpty());
+    }
+
+    @Test
+    @DisplayName("Region not found while save user - POST user/registration")
+    void givenUserForm_whenPostUser_thenReturnStatusNotFoundRegion() throws Exception {
+        //Prepare mock user
+        RegistrationUserForm form = new RegistrationUserForm();
+        form.setUsername("adam");
+        form.setPassword("adam1234");
+        form.setRegion(123);
+
+        //Prepare mock service method
+        Mockito.when(userDetailsService.registerNewUserAccount(ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenThrow(RegionNotFoundException.class);
+
+        //Validate POST request
+        mockMvc.perform(post("/user/registration")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(new ObjectMapper().writeValueAsString(form)))
+
+                //Validate 401 Not Found and JSON response type received
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Updating an existing user with success - PATCH /user/1 ")
+    void givenIdUserPathAndUser_whenPatchUser_thenReturnJsonUserModified() throws Exception {
+        //Prepare mock user
+        User userModified = new User();
+        userModified.setUsername("adamquiroz");
+
+        Region region = new Region(1, "North America");
+        User mockUser = new User(1, "adam", "adam@example.com", "Adam", "Quiroz",
+                1, 75258550, 1, 0, 0, "adam1234", 1, region);
+
+        User mockUserUpdating = new User(1, "adamquiroz", "adam@example.com", "Adam", "Quiroz",
+                1, 75258550, 1, 0, 0, "adam1234", 1, region);
+
+
+        //Prepare mock service methods
+        Mockito.when(userDetailsService.getUserById(1)).thenReturn(Optional.of(mockUser));
+        Mockito.when(userDetailsService.updateUser(mockUser)).thenReturn(Optional.of(mockUserUpdating));
+
+
+        //Prepare mock service method
+        mockMvc.perform(patch("/user/{idUser}", 1)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(new ObjectMapper().writeValueAsString(userModified)))
+
+                //Validate 200 Ok and JSON response type received
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+
+                //Validate response body
+                .andExpect(jsonPath("$.response.idUser", is(1)))
+                .andExpect(jsonPath("$.response.username", is("adamquiroz")))
+                .andExpect(jsonPath("$.response.email", is("adam@example.com")))
+                .andExpect(jsonPath("$.response.name", is("Adam")))
+                .andExpect(jsonPath("$.response.countryCode", is(1)))
+                .andExpect(jsonPath("$.response.cellphoneNumber", is(75258550)))
+                .andExpect(jsonPath("$.response.isPlayer", is(1)))
+                .andExpect(jsonPath("$.response.isOrganizer", is(0)))
+                .andExpect(jsonPath("$.response.isGambler", is(0)))
+                .andExpect(jsonPath("$.response.password", is("adam1234")))
+                .andExpect(jsonPath("$.response.status", is(1)))
+                .andExpect(jsonPath("$.response.region.idRegion", is(1)));
+    }
+
+    @Test
+    @DisplayName("User not found while updating - PATCH /user/23")
+    void givenIdUserPathAndUser_whenPatchUser_thenReturnStatusNotFound() throws Exception {
+        //Prepare mock user
+        User userModified = new User();
+        userModified.setUsername("adamquiroz");
+
+        //Prepare mock service methods
+        Mockito.when(userDetailsService.getUserById(1)).thenReturn(Optional.empty());
+
+        //Prepare mock service method
+        mockMvc.perform(patch("/user/{idUser}", 23)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(new ObjectMapper().writeValueAsString(userModified)))
+
+                //Validate 200 Ok and JSON response type received
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Updating user's password success - PATCH /user/2/update-password")
+    void givenIdUserPathAndChangePasswordRequest_whenPatchUserPassword_thenReturnJsonUser() throws Exception {
+        //Prepare mock user
         User userPasswordChanged = new User();
         userPasswordChanged.setPassword("12345");
 
@@ -166,22 +283,34 @@ class UserControllerTest {
         request.setNewPassword("12345");
         request.setOldPassword("contrasenia1");
 
-
+        //Prepare mock service methods
         Mockito.when(userDetailsService.changePassword(
-                Mockito.any(User.class),
-                Mockito.any(String.class),
-                Mockito.any(PasswordEncoder.class)
-        ))
-                .thenReturn(userPasswordChanged);
+                ArgumentMatchers.any(),
+                ArgumentMatchers.any(),
+                ArgumentMatchers.any()
+        )).thenReturn(userPasswordChanged);
 
-        mockMvc.perform(patch("/user/"+idUser+"/update-password")
-                .content(new ObjectMapper().writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+        //Validate PATCH request
+        mockMvc.perform(patch("/user/{idUser}/update-password", 2)
+                .content(new ObjectMapper().writeValueAsString(request)))
 
-                .andDo(print())
-                .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.response.password", is(request.getNewPassword())));
+                //Validate 200 Ok and JSON response type received
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+
+                //Validate response body
+                .andExpect(jsonPath("$.response.idUser", is(1)))
+                .andExpect(jsonPath("$.response.username", is("adamquiroz")))
+                .andExpect(jsonPath("$.response.email", is("adam@example.com")))
+                .andExpect(jsonPath("$.response.name", is("Adam")))
+                .andExpect(jsonPath("$.response.countryCode", is(1)))
+                .andExpect(jsonPath("$.response.cellphoneNumber", is(75258550)))
+                .andExpect(jsonPath("$.response.isPlayer", is(1)))
+                .andExpect(jsonPath("$.response.isOrganizer", is(0)))
+                .andExpect(jsonPath("$.response.isGambler", is(0)))
+                .andExpect(jsonPath("$.response.password", is("adam1234")))
+                .andExpect(jsonPath("$.response.status", is(1)))
+                .andExpect(jsonPath("$.response.region.idRegion", is(1)));
 
     }
 

@@ -11,8 +11,9 @@ public interface IUserTeamRepository {
     Optional<List<UserTeam>> getUserTeams();
     Optional<UserTeam> getUserTeamById(Integer id);
     UserTeam saveUserTeam(UserTeam newUserTeam);
-    List<UserTeam> getAllByUser(User user);
-    List<UserTeam> getAllByUserAndIsCapitan(User user, Integer isCapitan);
-    List<UserTeam> getAllByTeam(Team team);
     void deleteUserTeam(Integer id);
+
+    Optional<List<UserTeam>> getAllByUser(User user);
+    Optional<List<UserTeam>> getAllByUserAndIsCapitan(User user, Integer isCapitan);
+    Optional<List<UserTeam>> getAllByTeam(Team team);
 }

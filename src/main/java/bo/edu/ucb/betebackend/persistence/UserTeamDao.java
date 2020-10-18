@@ -44,19 +44,19 @@ public class UserTeamDao implements IUserTeamRepository {
     }
 
     @Override
-    public List<UserTeam> getAllByUser(User user) {
-        return userTeamMapper.toListUserTeam(userTeamRepository.findAllByUser(userMapper.toUserEntity(user)));
+    public Optional<List<UserTeam>> getAllByUser(User user) {
+        return Optional.ofNullable(userTeamMapper.toListUserTeam(userTeamRepository.findAllByUser(userMapper.toUserEntity(user))));
     }
 
     @Override
-    public List<UserTeam> getAllByUserAndIsCapitan(User user, Integer isCapitan) {
+    public Optional<List<UserTeam>> getAllByUserAndIsCapitan(User user, Integer isCapitan) {
         BeteUserEntity userEntity = userMapper.toUserEntity(user);
-        return userTeamMapper.toListUserTeam(userTeamRepository.findAllByUserAndIsCaptain(userEntity, isCapitan));
+        return Optional.ofNullable(userTeamMapper.toListUserTeam(userTeamRepository.findAllByUserAndIsCaptain(userEntity, isCapitan)));
     }
 
     @Override
-    public List<UserTeam> getAllByTeam(Team team) {
-        return userTeamMapper.toListUserTeam(userTeamRepository.findAllByTeam(teamMapper.toTeamEntity(team)));
+    public Optional<List<UserTeam>> getAllByTeam(Team team) {
+        return Optional.ofNullable(userTeamMapper.toListUserTeam(userTeamRepository.findAllByTeam(teamMapper.toTeamEntity(team))));
     }
 
     @Override

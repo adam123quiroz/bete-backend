@@ -6,12 +6,15 @@ import bo.edu.ucb.betebackend.domain.service.GameService;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 
 @RestController
+@Validated
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/game")
 public class GameController {
@@ -41,8 +44,8 @@ public class GameController {
             @ApiResponse(code = 400, message = "not found"),
     })
     public ResponseEntity<FormatResponse<Game>> getGameById(
-            @PathVariable("id") Integer id) {
-        return gameService.getGameById(id)
+            @PathVariable("id") String id) {
+        return gameService.getGameById(Integer.valueOf(id))
                 .map(game -> new ResponseEntity<>(
                         new FormatResponse<>(null, game),
                         HttpStatus.OK))

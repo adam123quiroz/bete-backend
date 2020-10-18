@@ -1,7 +1,11 @@
 package bo.edu.ucb.betebackend.domain.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class ChangePasswordRequest {
+    @NotNull(message = "oldPassword is mandatory")
     private String oldPassword;
+    @NotNull(message = "newPassword is mandatory")
     private String newPassword;
 
     public ChangePasswordRequest(String oldPassword, String newPassword) {

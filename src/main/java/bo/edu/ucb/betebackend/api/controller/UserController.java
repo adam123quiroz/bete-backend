@@ -1,5 +1,8 @@
 package bo.edu.ucb.betebackend.api.controller;
 
+import bo.edu.ucb.betebackend.api.exception.RegionNotFoundException;
+import bo.edu.ucb.betebackend.api.exception.UserNotFoundException;
+import bo.edu.ucb.betebackend.api.exception.UserPasswordNotEqualsException;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.dto.ChangePasswordRequest;
 import bo.edu.ucb.betebackend.domain.dto.ChangeRoleUserRequest;
@@ -11,23 +14,24 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
-import java.net.URI;
-import java.net.URISyntaxException;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
+@Validated
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/user")
 public class UserController {
     final private BeteUserDetailsService userDetailsService;
     final private PasswordEncoder passwordEncoder;
+
     final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public UserController(BeteUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
@@ -42,17 +46,12 @@ public class UserController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    public ResponseEntity<FormatResponse<User>> getUserById(
-            @PathVariable("idUser") Integer idUser) {
-        try {
-            logger.info(idUser.toString());
-            User user = userDetailsService.getUserById(idUser).orElseThrow(Exception::new);
-            return new ResponseEntity<>(new FormatResponse<>(null, user), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new FormatResponse<>(
-                    HttpStatus.BAD_REQUEST.toString(), null),
-                    HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<FormatResponse<User>> getUserById(@PathVariable String idUser) throws NumberFormatException {
+        return userDetailsService.getUserById(Integer.valueOf(idUser))
+                .map(user -> ResponseEntity
+                        .ok()
+                        .body(new FormatResponse<>(null, user)))
+                .orElseThrow(() -> new UserNotFoundException(Integer.valueOf(idUser)));
     }
 
     @CrossOrigin
@@ -76,41 +75,35 @@ public class UserController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    public HttpEntity<FormatResponse<User>> processRegistration(
-            @RequestBody RegistrationUserForm form) {
-        try {
-            User user = userDetailsService.registerNewUserAccount(form, passwordEncoder);
-            return new ResponseEntity<>(new FormatResponse<>(null, user), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new FormatResponse<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<FormatResponse<User>> processRegistration(
+            @Valid @NotNull @RequestBody RegistrationUserForm form) throws RegionNotFoundException {
+        User user = userDetailsService.registerNewUserAccount(form, passwordEncoder);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new FormatResponse<>(null, user));
     }
 
     @CrossOrigin
     @PatchMapping("/{userId}")
-    @ApiOperation("Registration for new users")
+    @ApiOperation("Updating the user that already exists")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    public HttpEntity<FormatResponse<User>> patchUser(
-            @PathVariable("userId") Integer id,
-            @RequestBody User patch) {
-        try {
-            User user = userDetailsService.getUserById(id).orElseThrow(Exception::new);
-            if (patch.getUsername() != null ) {
-                user.setUsername(patch.getUsername());
-            }
-            if (patch.getEmail() != null) {
-                user.setEmail(patch.getEmail());
-            }
-            if (patch.getCellphoneNumber() != 0) {
-                user.setCellphoneNumber(patch.getCellphoneNumber());
-            }
-            return new ResponseEntity<>(new FormatResponse<>(null, user), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new FormatResponse<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<FormatResponse<User>> patchUser(
+            @PathVariable("userId") String id,
+            @Valid @NotNull @RequestBody User user
+    ) throws NumberFormatException {
+        Integer idInt = Integer.valueOf(id);
+        User existingUser = userDetailsService.getUserById(idInt).orElseThrow(() -> new UserNotFoundException(idInt));
+        logger.info("Updating user with name:{}", existingUser.getUsername());
+        existingUser.setUsername(user.getUsername());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setCellphoneNumber(user.getCellphoneNumber());
+        existingUser = userDetailsService.updateUser(existingUser).orElseThrow(() -> new UserNotFoundException(idInt));
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>("", existingUser));
     }
 
     @CrossOrigin
@@ -120,22 +113,21 @@ public class UserController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    public ResponseEntity<FormatResponse<User>> changeUserPassword(
-            @PathVariable("idUser") Integer idUser,
-            @RequestBody ChangePasswordRequest changePasswordRequest
-    ) {
-        try {
-            User user = userDetailsService.getUserById(idUser).orElseThrow(Exception::new);
+    public ResponseEntity<? extends FormatResponse<?>> changeUserPassword(
+            @PathVariable("idUser") String idUser,
+            @Valid @NotNull @RequestBody ChangePasswordRequest changePasswordRequest
+    ) throws NumberFormatException{
+        Integer idInt = Integer.valueOf(idUser);
+        return userDetailsService.getUserById(idInt).map(user -> {
             if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
-                throw new Exception();
+                throw new UserPasswordNotEqualsException(idInt);
             }
             String newPassword = changePasswordRequest.getNewPassword();
             User userWithNewPassword = userDetailsService.changePassword(user, newPassword, passwordEncoder);
-            return new ResponseEntity<>(new FormatResponse<>(null, userWithNewPassword), HttpStatus.ACCEPTED);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new FormatResponse<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
-        }
+            return ResponseEntity
+                    .ok()
+                    .body(new FormatResponse<>(null, userWithNewPassword));
+        }).orElseThrow(() -> new UserNotFoundException(idInt));
     }
 
     @CrossOrigin

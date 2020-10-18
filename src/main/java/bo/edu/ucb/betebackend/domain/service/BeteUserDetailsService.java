@@ -1,7 +1,9 @@
 package bo.edu.ucb.betebackend.domain.service;
 
+import bo.edu.ucb.betebackend.api.exception.RegionNotFoundException;
 import bo.edu.ucb.betebackend.domain.Gambler;
 import bo.edu.ucb.betebackend.domain.Organizer;
+import bo.edu.ucb.betebackend.domain.Region;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.dto.ChangeRoleUserRequest;
 import bo.edu.ucb.betebackend.domain.dto.RegistrationUserForm;
@@ -10,7 +12,8 @@ import bo.edu.ucb.betebackend.domain.repository.IOrganizerRepository;
 import bo.edu.ucb.betebackend.domain.repository.IRegionRepository;
 import bo.edu.ucb.betebackend.domain.repository.IUserRepository;
 import bo.edu.ucb.betebackend.domain.typeof.TypeOfUsers;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +32,9 @@ public class BeteUserDetailsService implements UserDetailsService {
     final private IGamblerRepository gamblerRepository;
     final private IOrganizerRepository organizerRepository;
 
+    final static Logger logger = LoggerFactory.getLogger(BeteUserDetailsService.class);
+
+
     public BeteUserDetailsService(IUserRepository userRepository, IRegionRepository regionRepository, IGamblerRepository gamblerRepository, IOrganizerRepository organizerRepository) {
         this.userRepository = userRepository;
         this.regionRepository = regionRepository;
@@ -45,14 +51,13 @@ public class BeteUserDetailsService implements UserDetailsService {
 
     public User registerNewUserAccount(RegistrationUserForm newUser, PasswordEncoder passwordEncoder) {
         User user = newUser.toUser(passwordEncoder);
-        regionRepository
-                .getRegionById(newUser.getRegion())
-                .ifPresent(region -> {
-                    user.setRegion(region);
-                    userRepository.save(user);
-                });
-        return user;
+        User userWithRegion = regionRepository.getRegionById(newUser.getRegion())
+                .map(region -> getUser(user, region))
+                .orElseThrow(() -> new RegionNotFoundException(newUser.getRegion()));
+        return userRepository.save(userWithRegion);
     }
+
+
 
     public User changePassword(User user, String newPassword, PasswordEncoder passwordEncoder) {
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -69,6 +74,26 @@ public class BeteUserDetailsService implements UserDetailsService {
             initOrganizer(user, bankCard);
         }
         return user;
+    }
+
+    public Optional<User> updateUser(User user) {
+        return userRepository.getUserById(user.getIdUser())
+                .map(existingUser -> getUser(user, existingUser));
+    }
+
+    public Optional<User> getUserById(Integer id) {
+        return userRepository.getUserById(id);
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.getAllUsers().orElse(Collections.emptyList());
+    }
+
+    private User getUser(User user, User existingUser) {
+        existingUser.setUsername(user.getUsername());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setCellphoneNumber(user.getCellphoneNumber());
+        return existingUser;
     }
 
     private void initOrganizer(User user, String bankCard) {
@@ -89,11 +114,8 @@ public class BeteUserDetailsService implements UserDetailsService {
         gamblerRepository.saveGambler(gambler);
     }
 
-    public Optional<User> getUserById(Integer id) {
-        return userRepository.getUserById(id);
-    }
-
-    public List<User> findAllUsers() {
-        return userRepository.getAllUsers().orElse(Collections.emptyList());
+    private User getUser(User user, Region region) {
+        user.setRegion(region);
+        return user;
     }
 }

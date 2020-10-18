@@ -3,14 +3,31 @@ package bo.edu.ucb.betebackend.domain.dto;
 import bo.edu.ucb.betebackend.domain.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.validation.constraints.NotNull;
+
 public class RegistrationUserForm {
+    @NotNull(message = "username is mandatory")
     private String username;
+
+    @NotNull(message = "password is mandatory")
     private String password;
+
+    @NotNull(message = "email is mandatory")
     private String email;
+
+    @NotNull(message = "name is mandatory")
     private String name;
+
+    @NotNull(message = "lastname is mandatory")
     private String lastname;
+
+    @NotNull(message = "region is mandatory")
     private Integer region;
+
+    @NotNull(message = "countryCode is mandatory")
     private Integer countryCode;
+
+    @NotNull(message = "cellphoneNumber is mandatory")
     private Integer cellphoneNumber;
 
     public RegistrationUserForm(String username, String password, String email, String name, String lastname, Integer region, Integer countryCode, Integer cellphoneNumber) {
