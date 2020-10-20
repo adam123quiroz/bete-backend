@@ -1,6 +1,7 @@
 package bo.edu.ucb.betebackend.domain.service;
 
 import bo.edu.ucb.betebackend.api.exception.RegionNotFoundException;
+import bo.edu.ucb.betebackend.api.exception.RoleNotFoundException;
 import bo.edu.ucb.betebackend.domain.Gambler;
 import bo.edu.ucb.betebackend.domain.Organizer;
 import bo.edu.ucb.betebackend.domain.Region;
@@ -58,7 +59,6 @@ public class BeteUserDetailsService implements UserDetailsService {
     }
 
 
-
     public User changePassword(User user, String newPassword, PasswordEncoder passwordEncoder) {
         user.setPassword(passwordEncoder.encode(newPassword));
         return userRepository.save(user);
@@ -69,9 +69,10 @@ public class BeteUserDetailsService implements UserDetailsService {
         String bankCard = changeRoleUserRequest.getPayment();
         if (role == TypeOfUsers.Gambler.getStatus()) {
             initGambler(user, bankCard);
-        }
-        if (role == TypeOfUsers.Organizer.getStatus()) {
+        } else if (role == TypeOfUsers.Organizer.getStatus()) {
             initOrganizer(user, bankCard);
+        } else {
+            throw new RoleNotFoundException(role);
         }
         return user;
     }

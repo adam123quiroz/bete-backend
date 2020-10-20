@@ -1,7 +1,11 @@
 package bo.edu.ucb.betebackend.domain.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class ChangeRoleUserRequest {
+    @NotNull(message = "typeOf can not be null")
     private Integer typeOf;
+    @NotNull(message = "payment can not be null")
     private String payment;
 
     public ChangeRoleUserRequest(Integer typeOf, String payment) {

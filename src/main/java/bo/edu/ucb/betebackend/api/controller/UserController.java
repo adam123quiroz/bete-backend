@@ -1,6 +1,7 @@
 package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.api.exception.RegionNotFoundException;
+import bo.edu.ucb.betebackend.api.exception.RoleNotFoundException;
 import bo.edu.ucb.betebackend.api.exception.UserNotFoundException;
 import bo.edu.ucb.betebackend.api.exception.UserPasswordNotEqualsException;
 import bo.edu.ucb.betebackend.domain.User;
@@ -116,7 +117,7 @@ public class UserController {
     public ResponseEntity<? extends FormatResponse<?>> changeUserPassword(
             @PathVariable("idUser") String idUser,
             @Valid @NotNull @RequestBody ChangePasswordRequest changePasswordRequest
-    ) throws NumberFormatException{
+    ) throws NumberFormatException {
         Integer idInt = Integer.valueOf(idUser);
         return userDetailsService.getUserById(idInt).map(user -> {
             if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
@@ -138,16 +139,15 @@ public class UserController {
             @ApiResponse(code = 400, message = "not found"),
     })
     public ResponseEntity<FormatResponse<User>> updateRolesUser(
-            @PathVariable("idUser") Integer idUser,
-            @RequestBody ChangeRoleUserRequest userRequest) {
-        try {
-            User user = userDetailsService.getUserById(idUser).orElseThrow(Exception::new);
-            User userNewRole = userDetailsService.changeUserRole(userRequest, user);
-            return new ResponseEntity<>(new FormatResponse<>(null, userNewRole), HttpStatus.OK);
+            @PathVariable("idUser") String idUser,
+            @Valid @RequestBody ChangeRoleUserRequest userRequest)
+            throws NumberFormatException, RoleNotFoundException {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new FormatResponse<>(HttpStatus.BAD_REQUEST.toString(), null), HttpStatus.BAD_REQUEST);
-        }
+        Integer id = Integer.valueOf(idUser);
+        User user = userDetailsService.getUserById(id).orElseThrow(() -> new UserNotFoundException(id));
+        User userNewRole = userDetailsService.changeUserRole(userRequest, user);
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(null, userNewRole));
     }
 }
