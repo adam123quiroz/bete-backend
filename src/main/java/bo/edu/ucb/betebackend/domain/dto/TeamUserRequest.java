@@ -5,25 +5,35 @@ import bo.edu.ucb.betebackend.domain.Team;
 import java.util.List;
 
 public class TeamUserRequest {
-    private Team team;
+    private String teamName;
+    private String organization;
     private List<Integer> idsUserList;
-    private Integer isCapitan;
+    private Integer creator;
 
-    public TeamUserRequest(Team team, List<Integer> idsUserList, Integer isCapitan) {
-        this.team = team;
+    public TeamUserRequest(String teamName, String organization, List<Integer> idsUserList, Integer creator) {
+        this.teamName = teamName;
+        this.organization = organization;
         this.idsUserList = idsUserList;
-        this.isCapitan = isCapitan;
+        this.creator = creator;
     }
 
     public TeamUserRequest() {
     }
 
-    public Team getTeam() {
-        return team;
+    public String getTeamName() {
+        return teamName;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
     }
 
     public List<Integer> getIdsUserList() {
@@ -34,11 +44,11 @@ public class TeamUserRequest {
         this.idsUserList = idsUserList;
     }
 
-    public Integer getIsCapitan() {
-        return isCapitan;
+    public Integer getCreator() {
+        return creator;
     }
 
-    public void setIsCapitan(Integer isCapitan) {
-        this.isCapitan = isCapitan;
+    public void setCreator(Integer creator) {
+        this.creator = creator;
     }
 }

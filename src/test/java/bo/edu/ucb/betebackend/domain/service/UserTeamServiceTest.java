@@ -4,6 +4,7 @@ import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.UserTeam;
 import bo.edu.ucb.betebackend.domain.dto.TeamAndUserByCapitanResponse;
+import bo.edu.ucb.betebackend.domain.repository.IUserRepository;
 import bo.edu.ucb.betebackend.domain.repository.IUserTeamRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -77,7 +78,8 @@ class UserTeamServiceTest {
         );
 
         IUserTeamRepository userTeamRepository = Mockito.mock(IUserTeamRepository.class);
-        UserTeamService service = new UserTeamService(userTeamRepository);
+        IUserRepository userRepository = Mockito.mock(IUserRepository.class);
+        UserTeamService service = new UserTeamService(userTeamRepository, userRepository);
 
         Mockito.when(service.getAllTeamUserByUserAndNotAnswer(Mockito.any())).thenReturn(userTeamList);
 

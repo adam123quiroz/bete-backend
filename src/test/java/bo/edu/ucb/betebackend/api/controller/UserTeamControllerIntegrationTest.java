@@ -40,8 +40,8 @@ class UserTeamControllerIntegrationTest {
         List<Integer> idsUserList = Arrays.asList(1,2);
 
         TeamUserRequest teamUserRequest = new TeamUserRequest();
-        teamUserRequest.setTeam(newTeam);
-        teamUserRequest.setIsCapitan(TypeOfIsCapitanUserTeam.TheCapitan.getStatus());
+        teamUserRequest.setTeamName(newTeam.getTeamName());
+        teamUserRequest.setCreator(TypeOfIsCapitanUserTeam.TheCapitan.getStatus());
         teamUserRequest.setIdsUserList(idsUserList);
 
         mockMvc.perform(post("/team-user/creating")

@@ -4,7 +4,9 @@ import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.UserTeam;
 import bo.edu.ucb.betebackend.domain.dto.TeamAndUserByCapitanResponse;
+import bo.edu.ucb.betebackend.domain.dto.TeamUserRequest;
 import bo.edu.ucb.betebackend.domain.dto.UserCapitanResponse;
+import bo.edu.ucb.betebackend.domain.repository.IUserRepository;
 import bo.edu.ucb.betebackend.domain.repository.IUserTeamRepository;
 import bo.edu.ucb.betebackend.domain.typeof.TypeOfIsCapitanUserTeam;
 import org.slf4j.Logger;
@@ -23,9 +25,11 @@ public class UserTeamService {
     final static Logger logger = LoggerFactory.getLogger(UserTeamService.class);
 
     final private IUserTeamRepository userTeamRepository;
+    final private IUserRepository userRepository;
 
-    public UserTeamService(IUserTeamRepository userTeamRepository) {
+    public UserTeamService(IUserTeamRepository userTeamRepository, IUserRepository userRepository) {
         this.userTeamRepository = userTeamRepository;
+        this.userRepository = userRepository;
     }
 
     public UserTeam saveUserTeam(UserTeam newUserTeam) {
@@ -104,13 +108,42 @@ public class UserTeamService {
         }
     }
 
+    public void deleteUserMemberOfTeam(User user, User userCapitan, Team team) {
+//        UserTeam  userTeam = userTeamRepository;
+    }
+
     private void initCapitalResponse(Team team, TeamAndUserByCapitanResponse capitanResponse) {
         capitanResponse.setIdTeam(team.getIdTeam());
         capitanResponse.setNameTeam(team.getTeamName());
         capitanResponse.setOrganization(team.getOrganization());
     }
 
+    private void  saveUserTeamAndCapitan(Team teamSaved, User user) {
+        UserTeam newUserTeam = new UserTeam();
+        newUserTeam.setTeam(teamSaved);
+        newUserTeam.setStatus(1);
+        newUserTeam.setIsCaptain(TypeOfIsCapitanUserTeam.NotAnswer.getStatus());
+        newUserTeam.setUser(user);
+        userTeamRepository.saveUserTeam(newUserTeam);
+    }
+
     public List<UserTeam> getAllUserTeamByTeam(Team team) {
         return userTeamRepository.getAllByTeam(team).get();
+    }
+
+    public void addUsersToNewTeam(User userCreator, List<Integer> idsList, Team teamSaved) {
+
+        UserTeam userTeamCaptain = new UserTeam();
+        userTeamCaptain.setTeam(teamSaved);
+        userTeamCaptain.setUser(userCreator);
+        userTeamCaptain.setIsCaptain(TypeOfIsCapitanUserTeam.TheCapitan.getStatus());
+        userTeamCaptain.setStatus(1);
+        userTeamRepository.saveUserTeam(userTeamCaptain);
+
+        idsList
+                .stream()
+                .map(userRepository::getUserById)
+                .map(Optional::get)
+                .forEach(user -> saveUserTeamAndCapitan(teamSaved, user));
     }
 }

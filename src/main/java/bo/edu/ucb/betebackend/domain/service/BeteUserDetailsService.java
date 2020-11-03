@@ -2,10 +2,7 @@ package bo.edu.ucb.betebackend.domain.service;
 
 import bo.edu.ucb.betebackend.api.exception.RegionNotFoundException;
 import bo.edu.ucb.betebackend.api.exception.RoleNotFoundException;
-import bo.edu.ucb.betebackend.domain.Gambler;
-import bo.edu.ucb.betebackend.domain.Organizer;
-import bo.edu.ucb.betebackend.domain.Region;
-import bo.edu.ucb.betebackend.domain.User;
+import bo.edu.ucb.betebackend.domain.*;
 import bo.edu.ucb.betebackend.domain.dto.ChangeRoleUserRequest;
 import bo.edu.ucb.betebackend.domain.dto.RegistrationUserForm;
 import bo.edu.ucb.betebackend.domain.repository.IGamblerRepository;
@@ -119,4 +116,6 @@ public class BeteUserDetailsService implements UserDetailsService {
         user.setRegion(region);
         return user;
     }
+
+
 }

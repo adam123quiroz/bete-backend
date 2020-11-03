@@ -1,5 +1,7 @@
 package bo.edu.ucb.betebackend.api.controller;
 
+import bo.edu.ucb.betebackend.api.exception.TeamNotFoundException;
+import bo.edu.ucb.betebackend.api.exception.UserNotFoundException;
 import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.UserTeam;
@@ -7,6 +9,7 @@ import bo.edu.ucb.betebackend.domain.dto.*;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import bo.edu.ucb.betebackend.domain.service.TeamService;
 import bo.edu.ucb.betebackend.domain.service.UserTeamService;
+import bo.edu.ucb.betebackend.domain.typeof.TypeOfIsCapitanUserTeam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -46,22 +49,20 @@ public class UserTeamController {
     })
     public ResponseEntity<FormatResponse<String>> saveTeamWithUsers(
             @RequestBody TeamUserRequest request) {
-        try {
-            Team newTeam = request.getTeam();
-            List<Integer> idsList = request.getIdsUserList();
-            Team teamSaved = teamService.saveTeam(newTeam);
+        Team newTeam = new Team();
+        newTeam.setTeamName(request.getTeamName());
+        newTeam.setOrganization(request.getOrganization());
+        newTeam.setStatus(1);
+        User userCreator = userDetailsService.getUserById(request.getCreator())
+                .orElseThrow(() -> new UserNotFoundException(request.getCreator()));
+        List<Integer> idsList = request.getIdsUserList();
+        Team teamSaved = teamService.saveTeam(newTeam);
 
-            idsList
-                    .stream()
-                    .map(userDetailsService::getUserById)
-                    .map(Optional::get)
-                    .forEach(user -> saveUserTeam(request, teamSaved, user));
+        userTeamService.addUsersToNewTeam(userCreator, idsList, teamSaved);
 
-            return new ResponseEntity<>(new FormatResponse<>(null, HttpStatus.OK.toString()), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new FormatResponse<>(HttpStatus.NOT_FOUND.toString(), null), HttpStatus.NOT_FOUND);
-        }
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(HttpStatus.OK.toString()));
 
     }
 
@@ -75,7 +76,6 @@ public class UserTeamController {
     public ResponseEntity<FormatResponse<List<ResponseUserNotAnswer>>> getRequestNotAnswer(
             @PathVariable("idUser") Integer idUser
     ) throws Exception {
-        logger.info("AQ " + idUser);
         User user = userDetailsService.getUserById(idUser).orElseThrow(Exception::new);
         List<UserTeam> userTeamsByUser = userTeamService.getAllTeamUserByUserAndNotAnswer(user);
         List<ResponseUserNotAnswer> answers = new ArrayList<>(Collections.emptyList());
@@ -111,15 +111,16 @@ public class UserTeamController {
     @ApiOperation("save a team with users")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code = 400, message = "not found"),
+            @ApiResponse(code = 400, message = "not found user"),
     })
     public ResponseEntity<FormatResponse<List<TeamAndUserByCapitanResponse>>> getTheUsersAndTeamByCapitan(
             @PathVariable Integer idUser
-    ) throws Exception {
-        User user = userDetailsService.getUserById(idUser).orElseThrow(Exception::new);
+    ) {
+        User user = userDetailsService.getUserById(idUser).orElseThrow(() -> new UserNotFoundException(idUser));
         List<TeamAndUserByCapitanResponse> responses = userTeamService.getAllTeamAndUsersByCapitanUser(user);
-        return new ResponseEntity<>(new FormatResponse<>(null, responses),
-                HttpStatus.OK);
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(responses));
     }
 
     @CrossOrigin
@@ -134,16 +135,33 @@ public class UserTeamController {
     ) throws Exception {
         Team team = teamService.getTeamById(request.getIdTeam()).orElseThrow(Exception::new);
         userTeamService.changeCapitan(team, request.getIdUserOldCaptainInteger(), request.getIdUserNewCaptainInteger());
-        return new ResponseEntity<>(new FormatResponse<>(null, HttpStatus.OK.toString()), HttpStatus.OK);
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(HttpStatus.OK.name()));
     }
 
-
-    private void saveUserTeam(TeamUserRequest request, Team teamSaved, User user) {
-        UserTeam newUserTeam = new UserTeam();
-        newUserTeam.setTeam(teamSaved);
-        newUserTeam.setStatus(1);
-        newUserTeam.setIsCaptain(request.getIsCapitan());
-        newUserTeam.setUser(user);
-        userTeamService.saveUserTeam(newUserTeam);
+    @CrossOrigin
+    @PostMapping("/{idTeam}/remove-user-team/{idUser}/{idUserCaptain}")
+    @ApiOperation("save a team with users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<?>> deleteUserTeam(
+            @PathVariable String idTeam,
+            @PathVariable String idUser,
+            @PathVariable String idUserCaptain)
+            throws NumberFormatException {
+        Integer idUserInteger = Integer.valueOf(idUser);
+        Integer idTeamInteger = Integer.valueOf(idTeam);
+        Integer idUserCaptainInteger = Integer.valueOf(idUserCaptain);
+        User userCapitan = userDetailsService.getUserById(idUserCaptainInteger)
+                .orElseThrow(() -> new UserNotFoundException(idUserCaptainInteger));
+        User user = userDetailsService.getUserById(idUserInteger)
+                .orElseThrow(() -> new UserNotFoundException(idUserInteger));
+        Team team = teamService.getTeamById(idTeamInteger)
+                .orElseThrow(() -> new TeamNotFoundException(idTeamInteger));
+        userTeamService.deleteUserMemberOfTeam(user, userCapitan, team);
+        return null;
     }
 }
