@@ -4,7 +4,6 @@ import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.dto.ChangeCaptainRequest;
 import bo.edu.ucb.betebackend.domain.dto.RequestUpdateIsCapitan;
 import bo.edu.ucb.betebackend.domain.dto.TeamUserRequest;
-import bo.edu.ucb.betebackend.domain.typeof.TypeOfIsCapitanUserTeam;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
