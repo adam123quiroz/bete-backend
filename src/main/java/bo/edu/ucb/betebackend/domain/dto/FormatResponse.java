@@ -4,6 +4,14 @@ public class FormatResponse<T> {
     private String error;
     private T response;
 
+    public FormatResponse(T response) {
+        this.response = response;
+    }
+
+    public FormatResponse(String error) {
+        this.error = error;
+    }
+
     public FormatResponse(String error, T response) {
         this.error = error;
         this.response = response;
@@ -13,8 +21,9 @@ public class FormatResponse<T> {
         return error;
     }
 
-    public void setError(String error) {
+    public FormatResponse<T> setError(String error) {
         this.error = error;
+        return this;
     }
 
     public T getResponse() {

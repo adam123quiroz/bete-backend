@@ -51,7 +51,7 @@ public class UserController {
         return userDetailsService.getUserById(Integer.valueOf(idUser))
                 .map(user -> ResponseEntity
                         .ok()
-                        .body(new FormatResponse<>(null, user)))
+                        .body(new FormatResponse<>(user)))
                 .orElseThrow(() -> new UserNotFoundException(Integer.valueOf(idUser)));
     }
 
@@ -66,7 +66,7 @@ public class UserController {
         List<User> users = userDetailsService.findAllUsers();
         return ResponseEntity
                 .ok()
-                .body(new FormatResponse<>(null, users));
+                .body(new FormatResponse<>(users));
     }
 
     @CrossOrigin
@@ -81,7 +81,7 @@ public class UserController {
         User user = userDetailsService.registerNewUserAccount(form, passwordEncoder);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new FormatResponse<>(null, user));
+                .body(new FormatResponse<>(user));
     }
 
     @CrossOrigin
@@ -104,7 +104,7 @@ public class UserController {
         existingUser = userDetailsService.updateUser(existingUser).orElseThrow(() -> new UserNotFoundException(idInt));
         return ResponseEntity
                 .ok()
-                .body(new FormatResponse<>("", existingUser));
+                .body(new FormatResponse<>(existingUser));
     }
 
     @CrossOrigin
@@ -127,7 +127,7 @@ public class UserController {
             User userWithNewPassword = userDetailsService.changePassword(user, newPassword, passwordEncoder);
             return ResponseEntity
                     .ok()
-                    .body(new FormatResponse<>(null, userWithNewPassword));
+                    .body(new FormatResponse<>(userWithNewPassword));
         }).orElseThrow(() -> new UserNotFoundException(idInt));
     }
 
@@ -148,6 +148,6 @@ public class UserController {
         User userNewRole = userDetailsService.changeUserRole(userRequest, user);
         return ResponseEntity
                 .ok()
-                .body(new FormatResponse<>(null, userNewRole));
+                .body(new FormatResponse<>(userNewRole));
     }
 }

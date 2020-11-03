@@ -1,7 +1,11 @@
 package bo.edu.ucb.betebackend.domain.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class AuthenticationRequest {
+    @NotNull(message = "username is mandatory")
     private String username;
+    @NotNull(message = "password is mandatory")
     private String password;
 
     public AuthenticationRequest(String username, String password) {
