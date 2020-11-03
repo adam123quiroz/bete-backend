@@ -41,7 +41,8 @@ class UserTeamControllerIntegrationTest {
 
         TeamUserRequest teamUserRequest = new TeamUserRequest();
         teamUserRequest.setTeamName(newTeam.getTeamName());
-        teamUserRequest.setCreator(TypeOfIsCapitanUserTeam.TheCapitan.getStatus());
+        teamUserRequest.setOrganization(newTeam.getOrganization());
+        teamUserRequest.setCreator(3);
         teamUserRequest.setIdsUserList(idsUserList);
 
         mockMvc.perform(post("/team-user/creating")
@@ -51,7 +52,7 @@ class UserTeamControllerIntegrationTest {
 
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.response", is("200 OK")));
+                .andExpect(jsonPath("$.response", is("OK")));
 
     }
 

@@ -62,7 +62,7 @@ public class UserTeamController {
 
         return ResponseEntity
                 .ok()
-                .body(new FormatResponse<>(HttpStatus.OK.toString()));
+                .body(new FormatResponse<>(null, HttpStatus.OK.name()));
 
     }
 
