@@ -1,7 +1,14 @@
 package bo.edu.ucb.betebackend.domain;
 
+import bo.edu.ucb.betebackend.domain.dto.TournamentPostRequest;
+import bo.edu.ucb.betebackend.domain.typeof.TypeOfUsers;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Tournament {
     private Integer idTournament;
@@ -11,9 +18,48 @@ public class Tournament {
     private Date startDate;
     private Date endDate;
     private int isFinished;
-    private List<TournamentTeam> tournamentTeamList;
+//    private List<TournamentTeam> tournamentTeamList;
     private Game game;
     private Organizer organizer;
+
+    public Tournament(Integer idTournament, String name, String description, int status, Date startDate, Date endDate, int isFinished, Game game, Organizer organizer) {
+        this.idTournament = idTournament;
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.isFinished = isFinished;
+        this.game = game;
+        this.organizer = organizer;
+    }
+
+    public Tournament() {
+    }
+
+    public Tournament(String name, String description, int status, Date startDate, Date endDate, int isFinished, Game game, Organizer organizer) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.isFinished = isFinished;
+        this.game = game;
+        this.organizer = organizer;
+    }
+
+    public Tournament(TournamentPostRequest request) throws ParseException {
+        this.name = request.getName();
+        this.description = request.getDescription();
+        this.startDate = getDate(request.getStartDate());
+        this.endDate = getDate(request.getEndDate());
+        this.status = 1;
+    }
+
+    private Date getDate(String startDate) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        return format.parse(startDate);
+    }
 
     public Integer getIdTournament() {
         return idTournament;
@@ -71,13 +117,13 @@ public class Tournament {
         this.isFinished = isFinished;
     }
 
-    public List<TournamentTeam> getTournamentTeamList() {
+/*    public List<TournamentTeam> getTournamentTeamList() {
         return tournamentTeamList;
     }
 
     public void setTournamentTeamList(List<TournamentTeam> tournamentTeamList) {
         this.tournamentTeamList = tournamentTeamList;
-    }
+    }*/
 
     public Game getGame() {
         return game;

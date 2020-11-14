@@ -4,8 +4,9 @@ import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.UserTeam;
 import bo.edu.ucb.betebackend.domain.dto.TeamAndUserByCapitanResponse;
-import bo.edu.ucb.betebackend.domain.dto.TeamUserRequest;
+import bo.edu.ucb.betebackend.domain.dto.TeamWithUsersResponse;
 import bo.edu.ucb.betebackend.domain.dto.UserCapitanResponse;
+import bo.edu.ucb.betebackend.domain.dto.UserResponse;
 import bo.edu.ucb.betebackend.domain.repository.IUserRepository;
 import bo.edu.ucb.betebackend.domain.repository.IUserTeamRepository;
 import bo.edu.ucb.betebackend.domain.typeof.TypeOfIsCapitanUserTeam;
@@ -118,7 +119,7 @@ public class UserTeamService {
         capitanResponse.setOrganization(team.getOrganization());
     }
 
-    private void  saveUserTeamAndCapitan(Team teamSaved, User user) {
+    private void saveUserTeamAndCapitan(Team teamSaved, User user) {
         UserTeam newUserTeam = new UserTeam();
         newUserTeam.setTeam(teamSaved);
         newUserTeam.setStatus(1);
@@ -145,5 +146,17 @@ public class UserTeamService {
                 .map(userRepository::getUserById)
                 .map(Optional::get)
                 .forEach(user -> saveUserTeamAndCapitan(teamSaved, user));
+    }
+
+    public TeamWithUsersResponse getTeamWithUsersById(Team team) {
+        TeamWithUsersResponse response = new TeamWithUsersResponse(team);
+        List<UserResponse> userResponses = new ArrayList<>();
+        userTeamRepository.getAllByTeam(team)
+                .ifPresent(userTeams -> userTeams
+                        .forEach(userTeam -> userResponses.add(new UserResponse(
+                                userTeam.getUser(),
+                                userTeam.getIsCaptain()))));
+        response.setUserResponseList(userResponses);
+        return response;
     }
 }

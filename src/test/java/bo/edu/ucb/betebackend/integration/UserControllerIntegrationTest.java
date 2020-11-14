@@ -1,4 +1,4 @@
-package bo.edu.ucb.betebackend.api.controller;
+package bo.edu.ucb.betebackend.integration;
 
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import org.junit.jupiter.api.Test;

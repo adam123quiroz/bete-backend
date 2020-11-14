@@ -7,17 +7,19 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = {
         GameMapper.class,
         OrganizerMapper.class,
         TournamentTeamMapper.class
 })
 public interface TournamentMapper {
-    @Mappings({
-            @Mapping(source = "tournamentTeamEntityList", target = "tournamentTeamList")
-    })
+
     Tournament toTournament(TournamentEntity tournamentEntity);
+    List<Tournament> toListTournament(List<TournamentEntity> tournamentEntities);
 
     @InheritInverseConfiguration
+    @Mapping(target = "tournamentTeamEntityList", ignore = true)
     TournamentEntity toTournamentEntity(Tournament tournament);
 }

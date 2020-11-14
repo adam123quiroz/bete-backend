@@ -9,7 +9,6 @@ import bo.edu.ucb.betebackend.domain.dto.*;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import bo.edu.ucb.betebackend.domain.service.TeamService;
 import bo.edu.ucb.betebackend.domain.service.UserTeamService;
-import bo.edu.ucb.betebackend.domain.typeof.TypeOfIsCapitanUserTeam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -164,4 +162,22 @@ public class UserTeamController {
         userTeamService.deleteUserMemberOfTeam(user, userCapitan, team);
         return null;
     }
+
+    @CrossOrigin
+    @GetMapping("/team/{idTeam}")
+    @ApiOperation("save a team with users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<?>> getTeamById(@PathVariable String idTeam) throws NumberFormatException{
+        Integer idTeamInteger = Integer.valueOf(idTeam);
+        Team team = teamService.getTeamById(idTeamInteger).orElseThrow(() -> new TeamNotFoundException(idTeamInteger));
+        TeamWithUsersResponse teamWithUsers = userTeamService.getTeamWithUsersById(team);
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(teamWithUsers));
+    }
+
+
 }

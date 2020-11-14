@@ -1,10 +1,9 @@
-package bo.edu.ucb.betebackend.api.controller;
+package bo.edu.ucb.betebackend.integration;
 
 import bo.edu.ucb.betebackend.domain.Team;
-import bo.edu.ucb.betebackend.domain.dto.ChangeCaptainRequest;
-import bo.edu.ucb.betebackend.domain.dto.RequestUpdateIsCapitan;
-import bo.edu.ucb.betebackend.domain.dto.TeamUserRequest;
+import bo.edu.ucb.betebackend.domain.dto.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,8 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -108,6 +106,22 @@ class UserTeamControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
+    }
+
+    @Test
+    @DisplayName("Test when get team return response JSON - GET /user-team/team/30")
+    void testWhenGetTeamReturnResponseJson() throws Exception {
+
+        mockMvc.perform(get("/team-user/team/{idTeam}", 30))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+
+                .andExpect(jsonPath("$.response.idTeam", is(30)))
+                .andExpect(jsonPath("$.response.name", is("OG")))
+                .andExpect(jsonPath("$.response.organization", is("Dotas E-Sports")))
+                .andExpect(jsonPath("$.response.userResponseList[0].idUser", is(1)))
+                .andExpect(jsonPath("$.response.userResponseList[1].idUser", is(2)))
+                .andExpect(jsonPath("$.response.userResponseList[2].idUser", is(3)));
     }
 
 

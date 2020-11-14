@@ -22,4 +22,5 @@ public interface OrganizerMapper {
             @Mapping(target = "reviewEntityList", ignore = true),
     })
     OrganizerEntity toOrganizerEntity(Organizer organizer);
+    List<OrganizerEntity> toListOrganizerEntity(List<Organizer> organizers);
 }

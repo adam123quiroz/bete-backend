@@ -1,4 +1,4 @@
-package bo.edu.ucb.betebackend.domain.service;
+package bo.edu.ucb.betebackend.integration;
 
 import bo.edu.ucb.betebackend.domain.repository.IUserRepository;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -83,7 +83,6 @@ public class UserController {
                 .status(HttpStatus.CREATED)
                 .body(new FormatResponse<>(user));
     }
-
     @CrossOrigin
     @PatchMapping("/{userId}")
     @ApiOperation("Updating the user that already exists")
