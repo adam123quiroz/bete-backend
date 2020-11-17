@@ -6,7 +6,7 @@ import bo.edu.ucb.betebackend.domain.Region;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.dto.ChangePasswordRequest;
 import bo.edu.ucb.betebackend.domain.dto.ChangeRoleUserRequest;
-import bo.edu.ucb.betebackend.domain.dto.RegistrationUserForm;
+import bo.edu.ucb.betebackend.domain.dto.model.RegistrationUserForm;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import bo.edu.ucb.betebackend.domain.typeof.TypeOfUsers;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,7 +1,5 @@
 package bo.edu.ucb.betebackend.domain.dto;
 
-import bo.edu.ucb.betebackend.domain.Team;
-
 import java.util.List;
 
 public class TeamUserRequest {

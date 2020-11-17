@@ -139,7 +139,7 @@ public class UserTeamController {
     }
 
     @CrossOrigin
-    @PostMapping("/{idTeam}/remove-user-team/{idUser}/{idUserCaptain}")
+    @PatchMapping("/{idTeam}/remove-user-team/{idUser}")
     @ApiOperation("save a team with users")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
@@ -147,20 +147,18 @@ public class UserTeamController {
     })
     public ResponseEntity<FormatResponse<?>> deleteUserTeam(
             @PathVariable String idTeam,
-            @PathVariable String idUser,
-            @PathVariable String idUserCaptain)
-            throws NumberFormatException {
+            @PathVariable String idUser
+    ) throws Exception {
         Integer idUserInteger = Integer.valueOf(idUser);
         Integer idTeamInteger = Integer.valueOf(idTeam);
-        Integer idUserCaptainInteger = Integer.valueOf(idUserCaptain);
-        User userCapitan = userDetailsService.getUserById(idUserCaptainInteger)
-                .orElseThrow(() -> new UserNotFoundException(idUserCaptainInteger));
         User user = userDetailsService.getUserById(idUserInteger)
                 .orElseThrow(() -> new UserNotFoundException(idUserInteger));
         Team team = teamService.getTeamById(idTeamInteger)
                 .orElseThrow(() -> new TeamNotFoundException(idTeamInteger));
-        userTeamService.deleteUserMemberOfTeam(user, userCapitan, team);
-        return null;
+        userTeamService.deleteUserMemberOfTeam(user, team);
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>("", HttpStatus.OK));
     }
 
     @CrossOrigin
@@ -170,7 +168,7 @@ public class UserTeamController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    public ResponseEntity<FormatResponse<?>> getTeamById(@PathVariable String idTeam) throws NumberFormatException{
+    public ResponseEntity<FormatResponse<?>> getTeamById(@PathVariable String idTeam) throws NumberFormatException {
         Integer idTeamInteger = Integer.valueOf(idTeam);
         Team team = teamService.getTeamById(idTeamInteger).orElseThrow(() -> new TeamNotFoundException(idTeamInteger));
         TeamWithUsersResponse teamWithUsers = userTeamService.getTeamWithUsersById(team);

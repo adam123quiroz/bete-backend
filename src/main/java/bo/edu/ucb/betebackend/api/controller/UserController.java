@@ -8,7 +8,7 @@ import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.dto.ChangePasswordRequest;
 import bo.edu.ucb.betebackend.domain.dto.ChangeRoleUserRequest;
 import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
-import bo.edu.ucb.betebackend.domain.dto.RegistrationUserForm;
+import bo.edu.ucb.betebackend.domain.dto.model.RegistrationUserForm;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

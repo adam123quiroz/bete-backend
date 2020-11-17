@@ -18,11 +18,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -78,5 +81,43 @@ class TournamentTeamControllerTest {
                 .andExpect(jsonPath("$.response.idTournamentTeam", is(1)))
                 .andExpect(jsonPath("$.response.phase", is(1)))
                 .andExpect(jsonPath("$.response.status", is(1)));
+    }
+
+    @Test
+    @DisplayName("Test return a tournament pending list GET - /tournament-team/1/pending")
+    void testReturnATournamentPendingListGet() throws Exception {
+        //Prepare mock user
+        Game game = new Game(1, "Dota", 1);
+        Region mockRegion = new Region(1, "North America");
+        User mockUser = new User(1, "adam", "adam@example.com", "Adam", "Quiroz",
+                1, 75258550, 1, 0, 0, "adam1234", 1, mockRegion);
+        Organizer organizer = new Organizer(1, "A123ASNM5", 10, mockUser);
+        Tournament tournament = new Tournament(1, "International", "Dota International 2020", 1, new Date(2019), new Date(2020),
+                TypeOfIsFinishTournament.TournamentNotFinished.getTypeOfIsFinishTournament(), game, organizer);
+
+        Team team = new Team(1, "G2", "UCB", 1);
+        Team secondTeam = new Team(2, "G2", "UCB", 1);
+
+        TournamentTeam tournamentTeam = new TournamentTeam(1, 0, team, tournament, 1);
+        TournamentTeam secondTournamentTeam = new TournamentTeam(1, 0, secondTeam, tournament, 1);
+        List<TournamentTeam> tournamentTeams = Arrays.asList(tournamentTeam, secondTournamentTeam);
+
+
+        //Prepare mock service method
+        Mockito.when(tournamentService.getTournamentById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(tournament));
+        Mockito.when(tournamentTeamService.getTournamentPendingList(ArgumentMatchers.any(Tournament.class)))
+                .thenReturn(Optional.of(tournamentTeams));
+
+        //Validate POST request
+        mockMvc.perform(get("/tournament-team/{idTournament}/pending", 1))
+                //Validate 200 Ok and JSON response type received
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+
+                //Validate response body
+                .andExpect(jsonPath("$.response.idTournamentTeam", is(1)))
+                .andExpect(jsonPath("$.response.phase", is(1)))
+                .andExpect(jsonPath("$.response.status", is(1)));
+
     }
 }

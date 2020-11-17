@@ -16,4 +16,5 @@ public interface IUserTeamRepository {
     Optional<List<UserTeam>> getAllByUser(User user);
     Optional<List<UserTeam>> getAllByUserAndIsCapitan(User user, Integer isCapitan);
     Optional<List<UserTeam>> getAllByTeam(Team team);
+    Optional<UserTeam> getByTeamAndUser(Team team, User user);
 }

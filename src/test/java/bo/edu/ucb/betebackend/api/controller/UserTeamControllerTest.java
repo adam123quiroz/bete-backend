@@ -2,7 +2,7 @@ package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.dto.TeamWithUsersResponse;
-import bo.edu.ucb.betebackend.domain.dto.UserResponse;
+import bo.edu.ucb.betebackend.domain.dto.model.UserResponse;
 import bo.edu.ucb.betebackend.domain.service.TeamService;
 import bo.edu.ucb.betebackend.domain.service.UserTeamService;
 import org.junit.jupiter.api.DisplayName;

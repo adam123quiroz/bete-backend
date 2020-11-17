@@ -6,6 +6,7 @@ import bo.edu.ucb.betebackend.domain.UserTeam;
 import bo.edu.ucb.betebackend.domain.repository.IUserTeamRepository;
 import bo.edu.ucb.betebackend.persistence.dao.UserTeamRepository;
 import bo.edu.ucb.betebackend.persistence.entity.BeteUserEntity;
+import bo.edu.ucb.betebackend.persistence.entity.TeamEntity;
 import bo.edu.ucb.betebackend.persistence.mapper.TeamMapper;
 import bo.edu.ucb.betebackend.persistence.mapper.UserMapper;
 import bo.edu.ucb.betebackend.persistence.mapper.UserTeamMapper;
@@ -57,6 +58,15 @@ public class UserTeamDao implements IUserTeamRepository {
     @Override
     public Optional<List<UserTeam>> getAllByTeam(Team team) {
         return Optional.ofNullable(userTeamMapper.toListUserTeam(userTeamRepository.findAllByTeam(teamMapper.toTeamEntity(team))));
+    }
+
+    @Override
+    public Optional<UserTeam> getByTeamAndUser(Team team, User user) {
+        TeamEntity teamEntity = teamMapper.toTeamEntity(team);
+        BeteUserEntity userEntity = userMapper.toUserEntity(user);
+        UserTeam userTeam = userTeamMapper
+                .toUserTeam(userTeamRepository.findByTeamAndUser(teamEntity, userEntity));
+        return Optional.ofNullable(userTeam);
     }
 
     @Override

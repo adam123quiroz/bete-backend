@@ -6,7 +6,7 @@ import bo.edu.ucb.betebackend.domain.UserTeam;
 import bo.edu.ucb.betebackend.domain.dto.TeamAndUserByCapitanResponse;
 import bo.edu.ucb.betebackend.domain.dto.TeamWithUsersResponse;
 import bo.edu.ucb.betebackend.domain.dto.UserCapitanResponse;
-import bo.edu.ucb.betebackend.domain.dto.UserResponse;
+import bo.edu.ucb.betebackend.domain.dto.model.UserResponse;
 import bo.edu.ucb.betebackend.domain.repository.IUserRepository;
 import bo.edu.ucb.betebackend.domain.repository.IUserTeamRepository;
 import bo.edu.ucb.betebackend.domain.typeof.TypeOfIsCapitanUserTeam;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,8 +39,8 @@ public class UserTeamService {
     }
 
     public List<UserTeam> getAllTeamUserByUserAndNotAnswer(User user) {
-        List<UserTeam> userTeamsByUserList = userTeamRepository.getAllByUser(user).get();
-        return userTeamsByUserList
+        return userTeamRepository.getAllByUser(user)
+                .orElseGet(Collections::emptyList)
                 .stream()
                 .filter(userTeam -> userTeam.getIsCaptain() == TypeOfIsCapitanUserTeam.NotAnswer.getStatus())
                 .collect(Collectors.toList());
@@ -56,7 +57,7 @@ public class UserTeamService {
         List<UserTeam> userTeamsByUserList = userTeamRepository.getAllByUserAndIsCapitan(
                 user,
                 TypeOfIsCapitanUserTeam.TheCapitan.getStatus()
-        ).get();
+        ).orElseGet(Collections::emptyList);
         userTeamsByUserList
                 .stream()
                 .map(UserTeam::getTeam)
@@ -109,8 +110,13 @@ public class UserTeamService {
         }
     }
 
-    public void deleteUserMemberOfTeam(User user, User userCapitan, Team team) {
-//        UserTeam  userTeam = userTeamRepository;
+    public void deleteUserMemberOfTeam(User user, Team team) throws Exception {
+        UserTeam userTeam = userTeamRepository.getByTeamAndUser(team, user)
+                .orElseThrow(Exception::new); // TODO: 11/17/2020 Create a New Exception
+        userTeam.setIsCaptain(-2);
+        userTeam.setTeam(team);
+        userTeam.setUser(user);
+        userTeamRepository.saveUserTeam(userTeam);
     }
 
     private void initCapitalResponse(Team team, TeamAndUserByCapitanResponse capitanResponse) {
@@ -129,7 +135,8 @@ public class UserTeamService {
     }
 
     public List<UserTeam> getAllUserTeamByTeam(Team team) {
-        return userTeamRepository.getAllByTeam(team).get();
+        return userTeamRepository.getAllByTeam(team)
+                .orElseGet(Collections::emptyList);
     }
 
     public void addUsersToNewTeam(User userCreator, List<Integer> idsList, Team teamSaved) {

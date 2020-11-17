@@ -1,6 +1,7 @@
 package bo.edu.ucb.betebackend.domain.dto;
 
 import bo.edu.ucb.betebackend.domain.Team;
+import bo.edu.ucb.betebackend.domain.dto.model.UserResponse;
 
 import java.util.List;
 

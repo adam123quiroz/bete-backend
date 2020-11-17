@@ -11,4 +11,5 @@ public interface UserTeamRepository extends JpaRepository<UserTeamEntity, Intege
     List<UserTeamEntity> findAllByUser(BeteUserEntity userEntity);
     List<UserTeamEntity> findAllByUserAndIsCaptain(BeteUserEntity userEntity, Integer isCaptain);
     List<UserTeamEntity> findAllByTeam(TeamEntity team);
+    UserTeamEntity findByTeamAndUser(TeamEntity teamEntity, BeteUserEntity userEntity);
 }

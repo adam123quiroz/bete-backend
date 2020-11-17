@@ -1,9 +1,12 @@
 package bo.edu.ucb.betebackend.persistence;
 
+import bo.edu.ucb.betebackend.domain.Tournament;
 import bo.edu.ucb.betebackend.domain.TournamentTeam;
 import bo.edu.ucb.betebackend.domain.repository.ITournamentTeamRepository;
 import bo.edu.ucb.betebackend.persistence.dao.TournamentTeamRepository;
+import bo.edu.ucb.betebackend.persistence.entity.TournamentEntity;
 import bo.edu.ucb.betebackend.persistence.entity.TournamentTeamEntity;
+import bo.edu.ucb.betebackend.persistence.mapper.TournamentMapper;
 import bo.edu.ucb.betebackend.persistence.mapper.TournamentTeamMapper;
 import org.springframework.stereotype.Repository;
 
@@ -12,12 +15,22 @@ import java.util.Optional;
 
 @Repository
 public class TournamentTeamDao implements ITournamentTeamRepository {
-    private final TournamentTeamMapper tournamentTeamMapper;
     private final TournamentTeamRepository tournamentTeamRepository;
+    private final TournamentTeamMapper tournamentTeamMapper;
+    private final TournamentMapper tournamentMapper;
 
-    public TournamentTeamDao(TournamentTeamMapper tournamentTeamMapper, TournamentTeamRepository tournamentTeamRepository) {
+    public TournamentTeamDao(TournamentTeamMapper tournamentTeamMapper, TournamentTeamRepository tournamentTeamRepository, TournamentMapper tournamentMapper) {
         this.tournamentTeamMapper = tournamentTeamMapper;
         this.tournamentTeamRepository = tournamentTeamRepository;
+        this.tournamentMapper = tournamentMapper;
+    }
+
+    @Override
+    public Optional<List<TournamentTeam>> getListTournamentTeamsByTournamentAndPhase(Tournament tournament, Integer phase) {
+        TournamentEntity tournamentEntity = tournamentMapper.toTournamentEntity(tournament);
+        List<TournamentTeamEntity> tournamentTeamEntities = tournamentTeamRepository.findAllByTournamentAndPhase(tournamentEntity, phase);
+        List<TournamentTeam> tournamentTeams = tournamentTeamMapper.toListTournamentTeam(tournamentTeamEntities);
+        return Optional.ofNullable(tournamentTeams);
     }
 
     @Override
