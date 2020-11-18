@@ -34,6 +34,13 @@ public class UserTeamService {
         this.userRepository = userRepository;
     }
 
+    private static Team apply(UserTeam userTeam) {
+        return new Team(userTeam.getTeam().getIdTeam(),
+                userTeam.getTeam().getTeamName(),
+                userTeam.getTeam().getOrganization(),
+                userTeam.getTeam().getStatus());
+    }
+
     public UserTeam saveUserTeam(UserTeam newUserTeam) {
         return userTeamRepository.saveUserTeam(newUserTeam);
     }
@@ -165,5 +172,13 @@ public class UserTeamService {
                                 userTeam.getIsCaptain()))));
         response.setUserResponseList(userResponses);
         return response;
+    }
+
+    public List<Team> getAllTeamByUser(User user) {
+        return userTeamRepository.getAllByUser(user)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(UserTeamService::apply)
+                .collect(Collectors.toList());
     }
 }

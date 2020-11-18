@@ -1,7 +1,7 @@
 package bo.edu.ucb.betebackend.domain.service;
 
 import bo.edu.ucb.betebackend.domain.Team;
-import bo.edu.ucb.betebackend.domain.dto.TeamFormUpdateRequest;
+import bo.edu.ucb.betebackend.domain.dto.model.TeamModel;
 import bo.edu.ucb.betebackend.domain.repository.ITeamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class TeamService {
         return teamRepository.getTeamById(id);
     }
 
-    public Team updateTeam(Team team, TeamFormUpdateRequest request) {
+    public Team updateTeam(Team team, TeamModel request) {
         if (request.getNameTeam() != null) {
             team.setTeamName(request.getNameTeam());
         } else if (request.getOrganizationName() != null) {

@@ -6,6 +6,7 @@ import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.UserTeam;
 import bo.edu.ucb.betebackend.domain.dto.*;
+import bo.edu.ucb.betebackend.domain.dto.model.TeamModel;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import bo.edu.ucb.betebackend.domain.service.TeamService;
 import bo.edu.ucb.betebackend.domain.service.UserTeamService;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -177,5 +179,25 @@ public class UserTeamController {
                 .body(new FormatResponse<>(teamWithUsers));
     }
 
+    @CrossOrigin
+    @GetMapping("/{idUser}/all")
+    @ApiOperation("save a team with users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<?>> getListTeamByUser(
+            @PathVariable String idUser) throws NumberFormatException {
+        Integer idTeamInteger = Integer.parseInt(idUser);
+        User user = userDetailsService.getUserById(idTeamInteger)
+                .orElseThrow(() -> new UserNotFoundException(idTeamInteger));
+        List<TeamModel> collect = userTeamService.getAllTeamByUser(user)
+                .stream()
+                .map(team -> new TeamModel(team.getIdTeam(), team.getTeamName(), team.getOrganization()))
+                .collect(Collectors.toList());
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(collect));
 
+    }
 }

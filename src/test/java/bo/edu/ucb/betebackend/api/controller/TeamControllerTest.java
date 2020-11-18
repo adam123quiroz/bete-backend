@@ -1,7 +1,7 @@
 package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.domain.Team;
-import bo.edu.ucb.betebackend.domain.dto.TeamFormUpdateRequest;
+import bo.edu.ucb.betebackend.domain.dto.model.TeamModel;
 import bo.edu.ucb.betebackend.domain.service.TeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,11 +40,11 @@ class TeamControllerTest {
     void testUpdatingTeamData() throws Exception {
         Team team = new Team(1, "G2", "UCB", 1);
         Team teamUpdating = new Team(1, "OG", "Dota Teams", 1);
-        TeamFormUpdateRequest formUpdateRequest = new TeamFormUpdateRequest("OG", "Dota Teams");
+        TeamModel formUpdateRequest = new TeamModel("OG", "Dota Teams");
 
         Mockito.when(teamService.getTeamById(1))
                 .thenReturn(Optional.of(team));
-        Mockito.when(teamService.updateTeam(ArgumentMatchers.any(Team.class), ArgumentMatchers.any(TeamFormUpdateRequest.class)))
+        Mockito.when(teamService.updateTeam(ArgumentMatchers.any(Team.class), ArgumentMatchers.any(TeamModel.class)))
                 .thenReturn(teamUpdating);
 
         mockMvc.perform(patch("/team/{idTeam}/updating", 1)
@@ -71,7 +70,7 @@ class TeamControllerTest {
 
         Mockito.when(teamService.getTeamById(1))
                 .thenReturn(Optional.of(team));
-        Mockito.when(teamService.updateTeam(ArgumentMatchers.any(Team.class), ArgumentMatchers.any(TeamFormUpdateRequest.class)))
+        Mockito.when(teamService.updateTeam(ArgumentMatchers.any(Team.class), ArgumentMatchers.any(TeamModel.class)))
                 .thenReturn(teamUpdating);
 
         mockMvc.perform(patch("/team/{idTeam}/updating", 1)
@@ -90,7 +89,7 @@ class TeamControllerTest {
     @Test
     @DisplayName("Test not found user - PATCH /team/1/updating")
     void testNotFoundUser() throws Exception {
-        TeamFormUpdateRequest formUpdateRequest = new TeamFormUpdateRequest("OG", "Dota Teams");
+        TeamModel formUpdateRequest = new TeamModel("OG", "Dota Teams");
 
         Mockito.when(teamService.getTeamById(1))
                 .thenReturn(Optional.empty());

@@ -3,7 +3,7 @@ package bo.edu.ucb.betebackend.api.controller;
 import bo.edu.ucb.betebackend.api.exception.TeamNotFoundException;
 import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
-import bo.edu.ucb.betebackend.domain.dto.TeamFormUpdateRequest;
+import bo.edu.ucb.betebackend.domain.dto.model.TeamModel;
 import bo.edu.ucb.betebackend.domain.service.TeamService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -30,7 +30,7 @@ public class TeamController {
     })
     public ResponseEntity<FormatResponse<?>> updateTeam(
             @PathVariable String idTeam,
-            @RequestBody TeamFormUpdateRequest request
+            @RequestBody TeamModel request
     ) throws NumberFormatException {
         Integer idTeamInteger = Integer.valueOf(idTeam);
         Team team = teamService.getTeamById(idTeamInteger).orElseThrow(() -> new TeamNotFoundException(idTeamInteger));
