@@ -8,15 +8,15 @@ public class TournamentRequestUpdate {
     private Date startDate;
     private Date endDate;
     private Integer game;
-    private Integer organizer;
+    private Integer idUser;
 
-    public TournamentRequestUpdate(String name, String description, Date startDate, Date endDate, Integer game, Integer organizer) {
+    public TournamentRequestUpdate(String name, String description, Date startDate, Date endDate, Integer game, Integer idUser) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.game = game;
-        this.organizer = organizer;
+        this.idUser = idUser;
     }
 
     public TournamentRequestUpdate() {
@@ -62,11 +62,11 @@ public class TournamentRequestUpdate {
         this.game = game;
     }
 
-    public Integer getOrganizer() {
-        return organizer;
+    public Integer getIdUser() {
+        return idUser;
     }
 
-    public void setOrganizer(Integer organizer) {
-        this.organizer = organizer;
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
     }
 }

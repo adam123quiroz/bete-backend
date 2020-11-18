@@ -1,12 +1,17 @@
 package bo.edu.ucb.betebackend.domain.service;
 
 import bo.edu.ucb.betebackend.api.exception.GameNotFoundException;
+import bo.edu.ucb.betebackend.api.exception.OrganizerNotFoundException;
+import bo.edu.ucb.betebackend.api.exception.UserNotFoundException;
 import bo.edu.ucb.betebackend.domain.Game;
 import bo.edu.ucb.betebackend.domain.Organizer;
 import bo.edu.ucb.betebackend.domain.Tournament;
+import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.dto.TournamentRequestUpdate;
 import bo.edu.ucb.betebackend.domain.repository.IGameRepository;
+import bo.edu.ucb.betebackend.domain.repository.IOrganizerRepository;
 import bo.edu.ucb.betebackend.domain.repository.ITournamentRepository;
+import bo.edu.ucb.betebackend.domain.repository.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,10 +22,14 @@ import java.util.Optional;
 public class TournamentService {
     private final ITournamentRepository tournamentRepository;
     private final IGameRepository gameRepository;
+    private final IOrganizerRepository organizerRepository;
+    private final IUserRepository userRepository;
 
-    public TournamentService(ITournamentRepository tournamentRepository, IGameRepository gameRepository) {
+    public TournamentService(ITournamentRepository tournamentRepository, IGameRepository gameRepository, IOrganizerRepository organizerRepository, IUserRepository userRepository) {
         this.tournamentRepository = tournamentRepository;
         this.gameRepository = gameRepository;
+        this.organizerRepository = organizerRepository;
+        this.userRepository = userRepository;
     }
 
     public Tournament saveTournament(Tournament tournament) {
@@ -56,6 +65,13 @@ public class TournamentService {
             Game game = gameRepository.getGameById(requestUpdate.getGame())
                     .orElseThrow(() -> new GameNotFoundException(requestUpdate.getGame()));
             tournament.setGame(game);
+        }
+        if (requestUpdate.getIdUser() != null) {
+            User user = userRepository.getUserById(requestUpdate.getIdUser())
+                    .orElseThrow(() -> new UserNotFoundException(requestUpdate.getIdUser()));
+            Organizer organizer = organizerRepository.getOrganizerByUser(user)
+                    .orElseThrow(() -> new OrganizerNotFoundException(user.getIdUser()));
+            tournament.setOrganizer(organizer);
         }
         return tournamentRepository.saveTournament(tournament);
     }

@@ -49,7 +49,7 @@ public class TournamentController {
     public ResponseEntity<FormatResponse<?>> saveTournament(
             @NotNull @RequestBody TournamentPostRequest request
     ) throws ParseException {
-        Organizer organizer = organizerService.getOrganizerById(request.getIdUser())
+        Organizer organizer = organizerService.getOrganizerByUser(request.getIdUser())
                 .orElseThrow(() -> new OrganizerNotFoundException(request.getIdUser()));
         Game game = gameService.getGameById(request.getIdGame())
                 .orElseThrow(() -> new GameNotFoundException(request.getIdGame()));
@@ -92,7 +92,7 @@ public class TournamentController {
     public ResponseEntity<FormatResponse<?>> updateTournament(
             @PathVariable String idTournament,
             @RequestBody TournamentRequestUpdate request
-    ) throws GameNotFoundException, NumberFormatException{
+    ) throws GameNotFoundException, NumberFormatException, UserNotFoundException, OrganizerNotFoundException {
         Integer idTournamentInteger = Integer.parseInt(idTournament);
         Tournament tournament = tournamentService.getTournamentById(idTournamentInteger)
                 .orElseThrow(() -> new TournamentNotFoundException(idTournamentInteger));
