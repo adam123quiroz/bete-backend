@@ -49,8 +49,8 @@ public class TournamentController {
     public ResponseEntity<FormatResponse<?>> saveTournament(
             @NotNull @RequestBody TournamentPostRequest request
     ) throws ParseException {
-        Organizer organizer = organizerService.getOrganizerById(request.getIdOrganizer())
-                .orElseThrow(() -> new OrganizerNotFoundException(request.getIdOrganizer()));
+        Organizer organizer = organizerService.getOrganizerById(request.getIdUser())
+                .orElseThrow(() -> new OrganizerNotFoundException(request.getIdUser()));
         Game game = gameService.getGameById(request.getIdGame())
                 .orElseThrow(() -> new GameNotFoundException(request.getIdGame()));
         Tournament tournament = new Tournament(request);

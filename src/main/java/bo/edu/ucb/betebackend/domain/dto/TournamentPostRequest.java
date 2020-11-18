@@ -12,16 +12,16 @@ public class TournamentPostRequest {
     @NotNull
     private String endDate;
     @NotNull
-    private Integer idOrganizer;
+    private Integer idUser;
     @NotNull
     private Integer idGame;
 
-    public TournamentPostRequest(@NotNull String name, @NotNull String description, @NotNull String startDate, @NotNull String endDate, @NotNull Integer idOrganizer, @NotNull Integer idGame) {
+    public TournamentPostRequest(@NotNull String name, @NotNull String description, @NotNull String startDate, @NotNull String endDate, @NotNull Integer idUser, @NotNull Integer idGame) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.idOrganizer = idOrganizer;
+        this.idUser = idUser;
         this.idGame = idGame;
     }
 
@@ -57,12 +57,12 @@ public class TournamentPostRequest {
         this.endDate = endDate;
     }
 
-    public Integer getIdOrganizer() {
-        return idOrganizer;
+    public Integer getIdUser() {
+        return idUser;
     }
 
-    public void setIdOrganizer(Integer idOrganizer) {
-        this.idOrganizer = idOrganizer;
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
     }
 
     public Integer getIdGame() {
