@@ -49,30 +49,26 @@ public class TournamentService {
     }
 
     public Tournament updateTournament(TournamentRequestUpdate requestUpdate, Tournament tournament) {
-        if (requestUpdate.getName() != null) {
-            tournament.setName(requestUpdate.getName());
-        }
-        if (requestUpdate.getDescription() != null) {
-            tournament.setDescription(requestUpdate.getDescription());
-        }
-        if (requestUpdate.getEndDate() != null) {
-            tournament.setEndDate(requestUpdate.getEndDate());
-        }
-        if (requestUpdate.getStartDate() != null) {
-            tournament.setStartDate(requestUpdate.getStartDate());
-        }
-        if (requestUpdate.getGame() != null) {
-            Game game = gameRepository.getGameById(requestUpdate.getGame())
-                    .orElseThrow(() -> new GameNotFoundException(requestUpdate.getGame()));
-            tournament.setGame(game);
-        }
-        if (requestUpdate.getIdUser() != null) {
-            User user = userRepository.getUserById(requestUpdate.getIdUser())
-                    .orElseThrow(() -> new UserNotFoundException(requestUpdate.getIdUser()));
-            Organizer organizer = organizerRepository.getOrganizerByUser(user)
-                    .orElseThrow(() -> new OrganizerNotFoundException(user.getIdUser()));
-            tournament.setOrganizer(organizer);
-        }
+        if (requestUpdate.getName() != null) tournament.setName(requestUpdate.getName());
+        if (requestUpdate.getDescription() != null) tournament.setDescription(requestUpdate.getDescription());
+        if (requestUpdate.getEndDate() != null) tournament.setEndDate(requestUpdate.getEndDate());
+        if (requestUpdate.getStartDate() != null) tournament.setStartDate(requestUpdate.getStartDate());
+        if (requestUpdate.getGame() != null) updateGameAtTournament(requestUpdate, tournament);
+        if (requestUpdate.getIdUser() != null) updateOrganizerAtTournament(requestUpdate, tournament);
         return tournamentRepository.saveTournament(tournament);
+    }
+
+    private void updateGameAtTournament(TournamentRequestUpdate requestUpdate, Tournament tournament) {
+        Game game = gameRepository.getGameById(requestUpdate.getGame())
+                .orElseThrow(() -> new GameNotFoundException(requestUpdate.getGame()));
+        tournament.setGame(game);
+    }
+
+    private void updateOrganizerAtTournament(TournamentRequestUpdate requestUpdate, Tournament tournament) {
+        User user = userRepository.getUserById(requestUpdate.getIdUser())
+                .orElseThrow(() -> new UserNotFoundException(requestUpdate.getIdUser()));
+        Organizer organizer = organizerRepository.getOrganizerByUser(user)
+                .orElseThrow(() -> new OrganizerNotFoundException(user.getIdUser()));
+        tournament.setOrganizer(organizer);
     }
 }
