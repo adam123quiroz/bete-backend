@@ -40,6 +40,8 @@ public class UserTeamController {
         this.userTeamService = userTeamService;
     }
 
+
+
     @CrossOrigin
     @PostMapping("/creating")
     @ApiOperation("save a team with users")
@@ -191,9 +193,9 @@ public class UserTeamController {
         Integer idTeamInteger = Integer.parseInt(idUser);
         User user = userDetailsService.getUserById(idTeamInteger)
                 .orElseThrow(() -> new UserNotFoundException(idTeamInteger));
-        List<TeamModel> collect = userTeamService.getAllTeamByUser(user)
+        List<TeamModel> collect = userTeamService.getAllTeamByUserAndUserIsNotCapitan(user)
                 .stream()
-                .map(team -> new TeamModel(team.getIdTeam(), team.getTeamName(), team.getOrganization()))
+                .map(TeamModel::apply)
                 .collect(Collectors.toList());
         return ResponseEntity
                 .ok()

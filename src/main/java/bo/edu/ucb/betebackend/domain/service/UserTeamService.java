@@ -181,4 +181,12 @@ public class UserTeamService {
                 .map(UserTeamService::apply)
                 .collect(Collectors.toList());
     }
+
+    public List<UserTeam> getAllTeamByUserAndUserIsNotCapitan(User user) {
+        return userTeamRepository.getAllByUser(user)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(userTeam -> userTeam.getIsCaptain() == 0 || userTeam.getIsCaptain() == 1)
+                .collect(Collectors.toList());
+    }
 }
