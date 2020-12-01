@@ -54,6 +54,10 @@ public class MatchService {
         return Optional.of(groupMatch);
     }
 
+    public Optional<List<Match>> getListOfMatchesByTournament(Tournament tournament) {
+        return matchRepository.getListOfMatchesByTournament(tournament);
+    }
+
     private Match getMatch(Match match, Tournament tournament) {
         match.setTournament(tournament);
         match.setDate(new Date()); // TODO: 11/29/2020 Ask what Datetime
@@ -63,5 +67,11 @@ public class MatchService {
         match.setScoreTeam1(0);
         match.setScoreTeam2(0);
         return match;
+    }
+
+    public Match updateMatchResult(Match match, Integer scoreTeam1Integer, Integer scoreTeam2Integer) {
+        match.setScoreTeam1(scoreTeam1Integer);
+        match.setScoreTeam2(scoreTeam2Integer);
+        return matchRepository.saveMatch(match);
     }
 }

@@ -1,6 +1,7 @@
 package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.api.exception.TournamentNotFoundException;
+import bo.edu.ucb.betebackend.domain.Match;
 import bo.edu.ucb.betebackend.domain.Tournament;
 import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
 import bo.edu.ucb.betebackend.domain.service.MatchService;
@@ -13,6 +14,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -59,6 +62,43 @@ public class MatchController {
         Integer idTournamentIntegerInteger = Integer.valueOf(idTournament);
         Tournament tournament = tournamentService.getTournamentById(idTournamentIntegerInteger)
                 .orElseThrow(() -> new TournamentNotFoundException(idTournamentIntegerInteger));
+        List<Match> matches = matchService.getListOfMatchesByTournament(tournament)
+                .orElse(Collections.emptyList());
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(matches));
+    }
+
+    @CrossOrigin
+    @PatchMapping("/{idMatch}/update-result")
+    @ApiOperation("save a team with users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<?>> updateMatchResults(
+            @PathVariable String idMatch,
+            @RequestParam(name = "scoreTeam1") String scoreTeam1,
+            @RequestParam(name = "scoreTeam2") String scoreTeam2
+    ) throws Exception {
+        Integer idMatchInteger = Integer.valueOf(idMatch),
+                scoreTeam1Integer = Integer.valueOf(scoreTeam1), scoreTeam2Integer = Integer.valueOf(scoreTeam2);
+        Match match = matchService.getMatchById(idMatchInteger)
+                .orElseThrow(Exception::new); // TODO: 12/1/2020 create a Exceptions class Match
+        Match updateMatch = matchService.updateMatchResult(match, scoreTeam1Integer, scoreTeam2Integer);
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(updateMatch));
+    }
+
+    @CrossOrigin
+    @GetMapping("/all")
+    @ApiOperation("save a team with users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<?>> updateMatchResults() throws Exception {
         return null;
     }
 }
