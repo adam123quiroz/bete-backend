@@ -145,5 +145,14 @@ public class TournamentTeamEntity implements Serializable {
     public String toString() {
         return "bo.edu.ucb.betebackend.persistence.entity.TournamentTeamEntity[ idTournamentTeam=" + idTournamentTeam + " ]";
     }
+
+    @XmlTransient
+    public List<MatchEntity> getMatchList() {
+        return matchEntityList;
+    }
+
+    public void setMatchList(List<MatchEntity> matchEntityList) {
+        this.matchEntityList = matchEntityList;
+    }
     
 }

@@ -45,6 +45,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "TournamentEntity.findByIsFinished", query = "SELECT t FROM TournamentEntity t WHERE t.isFinished = :isFinished")})
 public class TournamentEntity implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tournament", fetch = FetchType.LAZY)
+    private List<MatchEntity> matchEntityList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -199,6 +201,24 @@ public class TournamentEntity implements Serializable {
     @Override
     public String toString() {
         return "bo.edu.ucb.betebackend.persistence.entity.TournamentEntity[ idTournament=" + idTournament + " ]";
+    }
+
+    @XmlTransient
+    public List<MatchEntity> getMatchEntityList() {
+        return matchEntityList;
+    }
+
+    public void setMatchEntityList(List<MatchEntity> matchEntityList) {
+        this.matchEntityList = matchEntityList;
+    }
+
+    @XmlTransient
+    public List<MatchEntity> getMatchList() {
+        return matchEntityList;
+    }
+
+    public void setMatchList(List<MatchEntity> matchEntityList) {
+        this.matchEntityList = matchEntityList;
     }
     
 }

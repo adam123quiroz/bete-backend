@@ -11,8 +11,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {
         TeamMapper.class,
-        TournamentTeamMapper.class,
-        BetMapper.class
+        TournamentMapper.class
 })
 public interface MatchMapper {
 

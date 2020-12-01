@@ -41,6 +41,8 @@
     <class>bo.edu.ucb.betebackend.persistence.entity.GamblerEntity</class>
     <class>bo.edu.ucb.betebackend.persistence.entity.TournamentTeamEntity</class>
     <class>bo.edu.ucb.betebackend.persistence.entity.BeteUserEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.MatchEntity</class>
+    <class>bo.edu.ucb.betebackend.persistence.entity.MatchEntity</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://server-bete-ucb.postgres.database.azure.com:5432/database_bete"/>
       <property name="javax.persistence.jdbc.userEntity" value="adamquiroz@server-bete-ucb"/>

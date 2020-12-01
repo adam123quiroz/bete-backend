@@ -24,6 +24,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -35,15 +37,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "match")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MatchEntity.findAll", query = "SELECT m FROM MatchEntity m"),
-    @NamedQuery(name = "MatchEntity.findByIdMatch", query = "SELECT m FROM MatchEntity m WHERE m.idMatch = :idMatch"),
-    @NamedQuery(name = "MatchEntity.findByScoreTeam1", query = "SELECT m FROM MatchEntity m WHERE m.scoreTeam1 = :scoreTeam1"),
-    @NamedQuery(name = "MatchEntity.findByScoreTeam2", query = "SELECT m FROM MatchEntity m WHERE m.scoreTeam2 = :scoreTeam2"),
-    @NamedQuery(name = "MatchEntity.findByDate", query = "SELECT m FROM MatchEntity m WHERE m.date = :date"),
-    @NamedQuery(name = "MatchEntity.findByTime", query = "SELECT m FROM MatchEntity m WHERE m.time = :time"),
-    @NamedQuery(name = "MatchEntity.findByIsFinished", query = "SELECT m FROM MatchEntity m WHERE m.isFinished = :isFinished"),
-    @NamedQuery(name = "MatchEntity.findByLinkStr", query = "SELECT m FROM MatchEntity m WHERE m.linkStr = :linkStr"),
-    @NamedQuery(name = "MatchEntity.findByStatus", query = "SELECT m FROM MatchEntity m WHERE m.status = :status")})
+    @NamedQuery(name = "Match.findAll", query = "SELECT m FROM MatchEntity m"),
+    @NamedQuery(name = "Match.findByIdMatch", query = "SELECT m FROM MatchEntity m WHERE m.idMatch = :idMatch"),
+    @NamedQuery(name = "Match.findByScoreTeam1", query = "SELECT m FROM MatchEntity m WHERE m.scoreTeam1 = :scoreTeam1"),
+    @NamedQuery(name = "Match.findByScoreTeam2", query = "SELECT m FROM MatchEntity m WHERE m.scoreTeam2 = :scoreTeam2"),
+    @NamedQuery(name = "Match.findByDate", query = "SELECT m FROM MatchEntity m WHERE m.date = :date"),
+    @NamedQuery(name = "Match.findByTime", query = "SELECT m FROM MatchEntity m WHERE m.time = :time"),
+    @NamedQuery(name = "Match.findByIsFinished", query = "SELECT m FROM MatchEntity m WHERE m.isFinished = :isFinished"),
+    @NamedQuery(name = "Match.findByLinkStr", query = "SELECT m FROM MatchEntity m WHERE m.linkStr = :linkStr"),
+    @NamedQuery(name = "Match.findByStatus", query = "SELECT m FROM MatchEntity m WHERE m.status = :status")})
 public class MatchEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,12 +65,15 @@ public class MatchEntity implements Serializable {
     @Temporal(TemporalType.TIME)
     private Date time;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "is_finished")
     private int isFinished;
     @Basic(optional = false)
+    @Size(min = 1, max = 200)
     @Column(name = "link_str")
     private String linkStr;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "status")
     private int status;
     @JoinColumn(name = "team2", referencedColumnName = "id_team")
@@ -77,9 +82,9 @@ public class MatchEntity implements Serializable {
     @JoinColumn(name = "team1", referencedColumnName = "id_team")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TeamEntity team1;
-    @JoinColumn(name = "tournament", referencedColumnName = "id_tournament_team")
+    @JoinColumn(name = "tournament", referencedColumnName = "id_tournament")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private TournamentTeamEntity tournament;
+    private TournamentEntity tournament;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "match", fetch = FetchType.LAZY)
     private List<BetEntity> betEntityList;
 
@@ -177,11 +182,11 @@ public class MatchEntity implements Serializable {
         this.team1 = team1;
     }
 
-    public TournamentTeamEntity getTournament() {
+    public TournamentEntity getTournament() {
         return tournament;
     }
 
-    public void setTournament(TournamentTeamEntity tournament) {
+    public void setTournament(TournamentEntity tournament) {
         this.tournament = tournament;
     }
 
@@ -216,7 +221,7 @@ public class MatchEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "bo.edu.ucb.betebackend.persistence.entity.MatchEntity[ idMatch=" + idMatch + " ]";
+        return "bo.edu.ucb.betebackend.persistence.entity.Match[ idMatch=" + idMatch + " ]";
     }
     
 }

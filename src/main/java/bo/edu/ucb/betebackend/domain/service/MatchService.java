@@ -39,23 +39,23 @@ public class MatchService {
     }
 
     public Optional<LeagueUtils.GroupMatch> raffleTeams(Tournament tournament) {
-        final TournamentTeam[] tournamentTeam = {new TournamentTeam()};
         List<Team> teamList = tournamentTeamRepository.getListTournamentTeamsByTournament(tournament)
                 .orElseGet(ArrayList::new)
                 .stream()
-                .peek(tournamentTeam1 -> tournamentTeam[0] = tournamentTeam1 )
                 .map(TournamentTeam::getTeam)
                 .collect(Collectors.toList());
+
         LeagueUtils.GroupMatch groupMatch = leagueUtils.raffleTeams(teamList);
         groupMatch.setMatches(groupMatch.getMatches().stream()
-                .map(match -> getMatch(match, tournamentTeam[0]))
+                .map(match -> getMatch(match, tournament))
                 .map(matchRepository::saveMatch)
                 .collect(Collectors.toList()));
+
         return Optional.of(groupMatch);
     }
 
-    private Match getMatch(Match match, TournamentTeam tournamentTeam) {
-        match.setTournament(tournamentTeam);
+    private Match getMatch(Match match, Tournament tournament) {
+        match.setTournament(tournament);
         match.setDate(new Date()); // TODO: 11/29/2020 Ask what Datetime
         match.setTime(new Date()); // TODO: 11/29/2020 Ask for the Time
         match.setIsFinished(0);
