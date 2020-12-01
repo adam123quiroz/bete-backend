@@ -99,7 +99,14 @@ public class Team {
                 Objects.equals(organization, team.organization);
     }
 
-//    public List<UserTeam> getUserTeamList() {
+    @Override
+    public String toString() {
+        return "Team{" +
+                "teamName='" + teamName + '\'' +
+                '}';
+    }
+
+    //    public List<UserTeam> getUserTeamList() {
 //        return userTeamList;
 //    }
 //

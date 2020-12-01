@@ -1,6 +1,7 @@
 package bo.edu.ucb.betebackend.persistence;
 
 import bo.edu.ucb.betebackend.domain.Team;
+import bo.edu.ucb.betebackend.domain.Tournament;
 import bo.edu.ucb.betebackend.domain.repository.ITeamRepository;
 import bo.edu.ucb.betebackend.persistence.dao.TeamRepository;
 import bo.edu.ucb.betebackend.persistence.mapper.TeamMapper;
@@ -36,6 +37,6 @@ public class TeamDao implements ITeamRepository {
 
     @Override
     public void remove(Integer id) {
-
+        teamRepository.deleteById(id);
     }
 }

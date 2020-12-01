@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface ITournamentTeamRepository {
     Optional<List<TournamentTeam>> getListTournamentTeamsByTournamentAndPhase(Tournament tournament, Integer phase);
+    Optional<List<TournamentTeam>> getListTournamentTeamsByTournament(Tournament tournament);
 
     Optional<TournamentTeam> getTournamentTeamById(Integer id);
     Optional<List<TournamentTeam>> getListOfTournamentTeams();

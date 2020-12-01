@@ -101,4 +101,23 @@ public class TournamentTeamController {
                 .body(new FormatResponse<>("", HttpStatus.OK.toString()));
     }
 
+    @CrossOrigin
+    @PatchMapping("/reject/{idTournamentTeam}")
+    @ApiOperation("Get user by Id")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<?>> patchPhasesTournamentTeam(
+            @PathVariable String idTournamentTeam
+    ) throws Exception {
+        Integer idTournamentInteger = Integer.parseInt(idTournamentTeam);
+        TournamentTeam tournamentTeam = tournamentTeamService.getTournamentTeamById(idTournamentInteger)
+                .orElseThrow(Exception::new); // TODO: 11/17/2020 Create a new Exception
+        tournamentTeamService.updatePhaseTournamentTeam(tournamentTeam, -1);
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>("", HttpStatus.OK.toString()));
+    }
+
 }

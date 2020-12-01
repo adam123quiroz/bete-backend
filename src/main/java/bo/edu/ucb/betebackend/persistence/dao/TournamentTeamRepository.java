@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface TournamentTeamRepository extends JpaRepository<TournamentTeamEntity, Integer> {
     List<TournamentTeamEntity> findAllByTournamentAndPhase(TournamentEntity tournamentEntity, Integer phase);
+    List<TournamentTeamEntity> findAllByTournament(TournamentEntity tournamentEntity);
 }

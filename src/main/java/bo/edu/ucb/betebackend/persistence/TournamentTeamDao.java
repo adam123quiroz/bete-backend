@@ -34,6 +34,12 @@ public class TournamentTeamDao implements ITournamentTeamRepository {
     }
 
     @Override
+    public Optional<List<TournamentTeam>> getListTournamentTeamsByTournament(Tournament tournament) {
+        TournamentEntity tournamentEntity = tournamentMapper.toTournamentEntity(tournament);
+        return Optional.ofNullable(tournamentTeamMapper.toListTournamentTeam(tournamentTeamRepository.findAllByTournament(tournamentEntity)));
+    }
+
+    @Override
     public Optional<TournamentTeam> getTournamentTeamById(Integer id) {
         return tournamentTeamRepository.findById(id)
                 .map(tournamentTeamMapper::toTournamentTeam);
