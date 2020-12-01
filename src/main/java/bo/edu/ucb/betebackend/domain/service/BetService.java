@@ -32,9 +32,9 @@ public class BetService {
     }
 
     public Bet saveBet(Match match, Gambler gambler, Team team, BetRequest bet) {
-        Bet newBet = getNewBet(match, gambler, team, bet);
         gambler.setCoins(gambler.getCoins() - bet.getQuantity());
-        gamblerRepository.saveGambler(gambler);
+        Gambler saveGambler = gamblerRepository.saveGambler(gambler);
+        Bet newBet = getNewBet(match, saveGambler, team, bet);
         return betRepository.saveBet(newBet);
     }
 
