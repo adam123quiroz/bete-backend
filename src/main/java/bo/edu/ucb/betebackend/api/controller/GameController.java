@@ -37,7 +37,7 @@ public class GameController {
 
     @CrossOrigin
     @GetMapping("/{id}")
-    @ApiOperation("authentication for register users")
+    @ApiOperation("Get a game by its id")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -55,7 +55,7 @@ public class GameController {
 
     @CrossOrigin
     @PostMapping("/save")
-    @ApiOperation("authentication for register users")
+    @ApiOperation("Save a new game")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -71,7 +71,7 @@ public class GameController {
 
     @CrossOrigin
     @DeleteMapping("/delete/{id}")
-    @ApiOperation("authentication for register users")
+    @ApiOperation("Delete a game by its id")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),

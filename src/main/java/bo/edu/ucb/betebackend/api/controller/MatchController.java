@@ -35,7 +35,7 @@ public class MatchController {
 
     @CrossOrigin
     @PostMapping("/{idTournament}/draw")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Draw an entire tournamet creating matches between participants")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -53,7 +53,7 @@ public class MatchController {
 
     @CrossOrigin
     @GetMapping("/tournament/{idTournament}")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Get all info of a tournament by its id")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -72,7 +72,7 @@ public class MatchController {
 
     @CrossOrigin
     @PatchMapping("/{idMatch}/update-result")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Update the result of a match")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -95,7 +95,7 @@ public class MatchController {
 
     @CrossOrigin
     @GetMapping("/all")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Get all the matches currently available")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),

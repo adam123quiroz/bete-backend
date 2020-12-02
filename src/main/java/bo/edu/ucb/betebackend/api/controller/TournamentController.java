@@ -41,7 +41,7 @@ public class TournamentController {
 
     @CrossOrigin
     @PostMapping("/create")
-    @ApiOperation("Get user by Id")
+    @ApiOperation("Create a Tournament")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -64,7 +64,7 @@ public class TournamentController {
 
     @CrossOrigin
     @GetMapping("/all/user/{idUser}")
-    @ApiOperation("Get user by Id")
+    @ApiOperation("Get all the tournaments that a user with idUser creates")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -84,7 +84,7 @@ public class TournamentController {
 
     @CrossOrigin
     @PatchMapping("/{idTournament}/update")
-    @ApiOperation("Get user by Id")
+    @ApiOperation("Update info for a tournament")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -104,7 +104,7 @@ public class TournamentController {
 
     @CrossOrigin
     @GetMapping("/coming")
-    @ApiOperation("Get user by Id")
+    @ApiOperation("Get all the tournament that will be come")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
