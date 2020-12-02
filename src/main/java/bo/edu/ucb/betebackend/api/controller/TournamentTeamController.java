@@ -37,7 +37,7 @@ public class TournamentTeamController {
 
     @CrossOrigin
     @PostMapping("/enroll")
-    @ApiOperation("Get user by Id")
+    @ApiOperation("Enroll a team in a Tournament")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -59,7 +59,7 @@ public class TournamentTeamController {
 
     @CrossOrigin
     @GetMapping("/{idTournament}/pending")
-    @ApiOperation("Get user by Id")
+    @ApiOperation("Get teams that not have accepted in a tournament yet")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -83,7 +83,7 @@ public class TournamentTeamController {
 
     @CrossOrigin
     @PatchMapping("/{idTournamentTeam}/accept")
-    @ApiOperation("Get user by Id")
+    @ApiOperation("Action that accept a team in a tournament")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -103,7 +103,7 @@ public class TournamentTeamController {
 
     @CrossOrigin
     @PatchMapping("/reject/{idTournamentTeam}")
-    @ApiOperation("Get user by Id")
+    @ApiOperation("Action that reject a team in a tournament")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),

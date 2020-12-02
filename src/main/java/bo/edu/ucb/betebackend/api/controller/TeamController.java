@@ -23,7 +23,7 @@ public class TeamController {
 
     @CrossOrigin
     @PatchMapping("/{idTeam}/updating")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Update info of a team")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),

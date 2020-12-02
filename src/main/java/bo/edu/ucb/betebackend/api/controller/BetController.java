@@ -39,7 +39,7 @@ public class BetController {
 
     @CrossOrigin
     @GetMapping("/all")
-    @ApiOperation("Registration for new users")
+    @ApiOperation("Obtain a list of all bets")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -54,7 +54,7 @@ public class BetController {
 
     @CrossOrigin
     @PostMapping("/create")
-    @ApiOperation("Registration for new users")
+    @ApiOperation("Create a bet for a match")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),

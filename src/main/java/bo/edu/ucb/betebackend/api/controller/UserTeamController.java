@@ -70,7 +70,7 @@ public class UserTeamController {
 
     @CrossOrigin
     @GetMapping("/{idUser}/not-answer")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Get invitations to teams that have not been answered yet")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -92,7 +92,7 @@ public class UserTeamController {
 
     @CrossOrigin
     @PatchMapping("/update")
-    @ApiOperation("save a team with users")
+        @ApiOperation("Update status of team member")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -110,7 +110,7 @@ public class UserTeamController {
 
     @CrossOrigin
     @GetMapping("/capitan/{idUser}")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Get all the teams where a user is captain")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found user"),
@@ -127,7 +127,7 @@ public class UserTeamController {
 
     @CrossOrigin
     @PostMapping("/change-captain")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Action that changes a captain")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -144,7 +144,7 @@ public class UserTeamController {
 
     @CrossOrigin
     @PatchMapping("/{idTeam}/remove-user-team/{idUser}")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Action for eliminate a member of a team")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -167,7 +167,7 @@ public class UserTeamController {
 
     @CrossOrigin
     @GetMapping("/team/{idTeam}")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Get info of a team")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -183,7 +183,7 @@ public class UserTeamController {
 
     @CrossOrigin
     @GetMapping("/{idUser}/all")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Get all the teams where a user is participating, but isnt a captain")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),

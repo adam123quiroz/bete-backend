@@ -29,7 +29,7 @@ public class GamblerController {
 
     @CrossOrigin
     @GetMapping("/{idUser}")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Get information of a gambler user (e.g. Number of Coins)")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -49,7 +49,7 @@ public class GamblerController {
 
     @CrossOrigin
     @PostMapping("/buy")
-    @ApiOperation("save a team with users")
+    @ApiOperation("Buy coins in the system")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),

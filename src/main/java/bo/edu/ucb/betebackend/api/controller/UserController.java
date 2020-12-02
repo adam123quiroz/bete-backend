@@ -132,7 +132,7 @@ public class UserController {
 
     @CrossOrigin
     @PatchMapping("/{idUser}/role-update")
-    @ApiOperation("Registration for new users")
+    @ApiOperation("Registration for new role of users")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
