@@ -82,17 +82,24 @@ public class MatchService {
         return Optional.of(groupMatch);
     }
 
-    public Optional<List<?>> getListMatchWithOutcomeForecast(List<Match> matches) {
-        List<Integer> sum1 = matches.stream()
-                .map(match -> getSumBet(match, 1))
-                .collect(Collectors.toList());
-        List<Integer> sum = matches.stream()
-                .map(match -> getSumBet(match, 2))
-                .collect(Collectors.toList());
-        return Optional.of(extractedCreateList(matches, sum1, sum).stream()
-                .map(this::apply)
-                .peek(matchExpectResponse -> logger.info(matchExpectResponse.toString()))
-                .collect(Collectors.toList()));
+    public Optional<List<MatchExpectResponse>> getListMatchWithOutcomeForecast(List<Match> matches) {
+        try {
+            List<Integer> sum1 = matches.stream()
+                    .map(match -> getSumBet(match, 1))
+                    .collect(Collectors.toList());
+            List<Integer> sum = matches.stream()
+                    .map(match -> getSumBet(match, 2))
+                    .collect(Collectors.toList());
+            logger.info("sum " + sum1.size());
+            logger.info("sum1 " + sum.size());
+            return Optional.of(extractedCreateList(matches, sum1, sum).stream()
+                    .map(this::apply)
+                    .peek(matchExpectResponse -> logger.info(matchExpectResponse.toString()))
+                    .collect(Collectors.toList()));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     private List<BettingAlgorithmsUtils> extractedCreateList(List<Match> matches, List<Integer> sum1, List<Integer> sum) {
@@ -110,6 +117,7 @@ public class MatchService {
         return betRepository.getAllBetsByMatch(match)
                 .orElseGet(Collections::emptyList)
                 .stream()
+                .peek(bet -> logger.info("kk " + bet))
                 .filter(bet -> bet.getTeam() == i)
                 .mapToInt(Bet::getQuantity)
                 .sum();

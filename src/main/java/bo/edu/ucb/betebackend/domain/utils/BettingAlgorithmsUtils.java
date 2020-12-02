@@ -32,13 +32,11 @@ public class BettingAlgorithmsUtils {
     }
 
     public double getExpectedTeam1() {
-        DecimalFormat df = new DecimalFormat("#.00");
-        return Double.parseDouble(df.format(((double) totalSumTeam2 / (double) totalSumTeam1) + 1.0));
+        return ((double) totalSumTeam2 / (double) totalSumTeam1) + 1.0;
     }
 
     public double getExpectedTeam2() {
-        DecimalFormat df = new DecimalFormat("#.00");
-        return Double.parseDouble(df.format(((double) totalSumTeam1 / (double) totalSumTeam2) + 1.0));
+        return ((double) totalSumTeam1 / (double) totalSumTeam2) + 1.0;
 
     }
 

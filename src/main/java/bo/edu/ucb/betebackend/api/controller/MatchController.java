@@ -4,6 +4,7 @@ import bo.edu.ucb.betebackend.api.exception.TournamentNotFoundException;
 import bo.edu.ucb.betebackend.domain.Match;
 import bo.edu.ucb.betebackend.domain.Tournament;
 import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
+import bo.edu.ucb.betebackend.domain.dto.response.MatchExpectResponse;
 import bo.edu.ucb.betebackend.domain.service.MatchService;
 import bo.edu.ucb.betebackend.domain.service.TeamService;
 import bo.edu.ucb.betebackend.domain.service.TournamentService;
@@ -99,10 +100,10 @@ public class MatchController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    public ResponseEntity<FormatResponse<?>> updateMatchResults() {
+    public ResponseEntity<FormatResponse<?>> getResultsMatch() {
         List<Match> matches = matchService.getAllMatchesByIsFinished(0)
                 .orElseGet(Collections::emptyList);
-        List<?> objects = matchService.getListMatchWithOutcomeForecast(matches)
+        List<MatchExpectResponse> objects = matchService.getListMatchWithOutcomeForecast(matches)
                 .orElseGet(Collections::emptyList);
         return ResponseEntity
                 .ok()
