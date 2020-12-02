@@ -35,8 +35,20 @@ public class LeagueUtils {
     public GroupMatch raffleTeams(List<Team> teams) {
         Collections.shuffle(teams, new Random());
         int count = 1;
+        return getGroupMatch(teams, count);
+    }
+
+    private GroupMatch getGroupMatch(List<Team> teams, int count) {
         List<Match> matches = new ArrayList<>();
         Match match = new Match();
+        GroupMatch groupMatch = new GroupMatch();
+        extracted(teams, count, matches, match);
+        if (teams.size() % 2 != 0) groupMatch.setTeam(teams.get(teams.size() - 1));
+        groupMatch.setMatches(matches);
+        return groupMatch;
+    }
+
+    private void extracted(List<Team> teams, int count, List<Match> matches, Match match) {
         for (Team team : teams) {
             if (count == 1) {
                 match.setTeam1(team);
@@ -48,9 +60,5 @@ public class LeagueUtils {
                 match = new Match();
             }
         }
-        GroupMatch groupMatch = new GroupMatch();
-        if (teams.size() % 2 != 0) groupMatch.setTeam(teams.get(teams.size() - 1));
-        groupMatch.setMatches(matches);
-        return groupMatch;
     }
 }

@@ -7,7 +7,7 @@ import bo.edu.ucb.betebackend.domain.Game;
 import bo.edu.ucb.betebackend.domain.Organizer;
 import bo.edu.ucb.betebackend.domain.Tournament;
 import bo.edu.ucb.betebackend.domain.User;
-import bo.edu.ucb.betebackend.domain.dto.TournamentRequestUpdate;
+import bo.edu.ucb.betebackend.domain.dto.request.TournamentRequestUpdate;
 import bo.edu.ucb.betebackend.domain.repository.IGameRepository;
 import bo.edu.ucb.betebackend.domain.repository.IOrganizerRepository;
 import bo.edu.ucb.betebackend.domain.repository.ITournamentRepository;

@@ -2,7 +2,7 @@ package bo.edu.ucb.betebackend.domain.service;
 
 import bo.edu.ucb.betebackend.domain.Gambler;
 import bo.edu.ucb.betebackend.domain.User;
-import bo.edu.ucb.betebackend.domain.dto.GamblerRequest;
+import bo.edu.ucb.betebackend.domain.dto.request.GamblerRequest;
 import bo.edu.ucb.betebackend.domain.repository.IGamblerRepository;
 import org.springframework.stereotype.Service;
 

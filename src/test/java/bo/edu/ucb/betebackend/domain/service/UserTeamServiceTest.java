@@ -3,7 +3,7 @@ package bo.edu.ucb.betebackend.domain.service;
 import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.User;
 import bo.edu.ucb.betebackend.domain.UserTeam;
-import bo.edu.ucb.betebackend.domain.dto.TeamAndUserByCapitanResponse;
+import bo.edu.ucb.betebackend.domain.dto.response.TeamAndUserByCapitanResponse;
 import bo.edu.ucb.betebackend.domain.repository.IUserRepository;
 import bo.edu.ucb.betebackend.domain.repository.IUserTeamRepository;
 import org.junit.jupiter.api.Test;

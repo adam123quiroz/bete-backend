@@ -1,7 +1,7 @@
 package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.domain.Game;
-import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
+import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
 import bo.edu.ucb.betebackend.domain.service.GameService;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 

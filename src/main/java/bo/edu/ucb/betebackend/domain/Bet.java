@@ -11,6 +11,19 @@ public class Bet {
     private Match match;
     private Team teamIdTeam;
 
+    public Bet(Integer idBet, int quantity, int team, Date date, Gambler gambler, Match match, Team teamIdTeam) {
+        this.idBet = idBet;
+        this.quantity = quantity;
+        this.team = team;
+        this.date = date;
+        this.gambler = gambler;
+        this.match = match;
+        this.teamIdTeam = teamIdTeam;
+    }
+
+    public Bet() {
+    }
+
     public Integer getIdBet() {
         return idBet;
     }

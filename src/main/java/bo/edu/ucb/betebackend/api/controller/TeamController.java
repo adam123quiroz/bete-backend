@@ -2,7 +2,7 @@ package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.api.exception.TeamNotFoundException;
 import bo.edu.ucb.betebackend.domain.Team;
-import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
+import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
 import bo.edu.ucb.betebackend.domain.dto.model.TeamModel;
 import bo.edu.ucb.betebackend.domain.service.TeamService;
 import io.swagger.annotations.ApiOperation;

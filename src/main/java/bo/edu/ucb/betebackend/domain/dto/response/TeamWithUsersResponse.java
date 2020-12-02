@@ -1,4 +1,4 @@
-package bo.edu.ucb.betebackend.domain.dto;
+package bo.edu.ucb.betebackend.domain.dto.response;
 
 import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.dto.model.UserResponse;

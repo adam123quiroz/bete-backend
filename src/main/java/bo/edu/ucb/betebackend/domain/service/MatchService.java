@@ -1,20 +1,15 @@
 package bo.edu.ucb.betebackend.domain.service;
 
-import bo.edu.ucb.betebackend.domain.Match;
-import bo.edu.ucb.betebackend.domain.Team;
-import bo.edu.ucb.betebackend.domain.Tournament;
-import bo.edu.ucb.betebackend.domain.TournamentTeam;
-import bo.edu.ucb.betebackend.domain.repository.IMatchRepository;
-import bo.edu.ucb.betebackend.domain.repository.ITeamRepository;
-import bo.edu.ucb.betebackend.domain.repository.ITournamentRepository;
-import bo.edu.ucb.betebackend.domain.repository.ITournamentTeamRepository;
+import bo.edu.ucb.betebackend.domain.*;
+import bo.edu.ucb.betebackend.domain.dto.response.MatchExpectResponse;
+import bo.edu.ucb.betebackend.domain.repository.*;
+import bo.edu.ucb.betebackend.domain.utils.BettingAlgorithmsUtils;
 import bo.edu.ucb.betebackend.domain.utils.LeagueUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,19 +18,52 @@ public class MatchService {
     private final ITeamRepository teamRepository;
     private final ITournamentTeamRepository tournamentTeamRepository;
     private final IMatchRepository matchRepository;
+    private final IBetRepository betRepository;
 
     private final LeagueUtils leagueUtils;
 
-    public MatchService(ITournamentRepository tournamentRepository, ITeamRepository teamRepository, ITournamentTeamRepository tournamentTeamRepository, IMatchRepository matchRepository, LeagueUtils leagueUtils) {
+    final static Logger logger = LoggerFactory.getLogger(MatchService.class);
+
+
+    public MatchService(ITournamentRepository tournamentRepository, ITeamRepository teamRepository,
+                        ITournamentTeamRepository tournamentTeamRepository, IMatchRepository matchRepository, IBetRepository betRepository, LeagueUtils leagueUtils) {
         this.tournamentRepository = tournamentRepository;
         this.teamRepository = teamRepository;
         this.tournamentTeamRepository = tournamentTeamRepository;
         this.matchRepository = matchRepository;
+        this.betRepository = betRepository;
         this.leagueUtils = leagueUtils;
+    }
+
+    private MatchExpectResponse apply(BettingAlgorithmsUtils bettingAlgorithmsUtils) {
+        return new MatchExpectResponse(
+                bettingAlgorithmsUtils.getIdMatch().getIdMatch(),
+                bettingAlgorithmsUtils.getIdMatch().getTournament(),
+                bettingAlgorithmsUtils.getIdMatch().getTeam1(),
+                bettingAlgorithmsUtils.getIdMatch().getTeam2(),
+                bettingAlgorithmsUtils.getIdMatch().getScoreTeam1(),
+                bettingAlgorithmsUtils.getIdMatch().getScoreTeam2(),
+                bettingAlgorithmsUtils.getExpectedTeam1(),
+                bettingAlgorithmsUtils.getExpectedTeam2(),
+                bettingAlgorithmsUtils.getIdMatch().getIsFinished()
+        );
     }
 
     public Optional<Match> getMatchById(Integer id) {
         return matchRepository.getMatchById(id);
+    }
+
+    public Optional<List<Match>> getAllMatches() {
+        return matchRepository.getAllMatches();
+    }
+
+    public Optional<List<Match>> getAllMatchesByIsFinished(Integer status) {
+        List<Match> matchStream = getAllMatches()
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(match -> match.getIsFinished() == status)
+                .collect(Collectors.toList());
+        return Optional.of(matchStream);
     }
 
     public Optional<LeagueUtils.GroupMatch> raffleTeams(Tournament tournament) {
@@ -54,8 +82,47 @@ public class MatchService {
         return Optional.of(groupMatch);
     }
 
+    public Optional<List<?>> getListMatchWithOutcomeForecast(List<Match> matches) {
+        List<Integer> sum1 = matches.stream()
+                .map(match -> getSumBet(match, 1))
+                .collect(Collectors.toList());
+        List<Integer> sum = matches.stream()
+                .map(match -> getSumBet(match, 2))
+                .collect(Collectors.toList());
+        return Optional.of(extractedCreateList(matches, sum1, sum).stream()
+                .map(this::apply)
+                .peek(matchExpectResponse -> logger.info(matchExpectResponse.toString()))
+                .collect(Collectors.toList()));
+    }
+
+    private List<BettingAlgorithmsUtils> extractedCreateList(List<Match> matches, List<Integer> sum1, List<Integer> sum) {
+        List<BettingAlgorithmsUtils> bettingAlgorithmsUtils = new ArrayList<>();
+        for (int i = 0; i < matches.size(); i++) {
+            bettingAlgorithmsUtils.add(new BettingAlgorithmsUtils(
+                    matches.get(i),
+                    sum1.get(i),
+                    sum.get(i)));
+        }
+        return bettingAlgorithmsUtils;
+    }
+
+    private int getSumBet(Match match, int i) {
+        return betRepository.getAllBetsByMatch(match)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(bet -> bet.getTeam() == i)
+                .mapToInt(Bet::getQuantity)
+                .sum();
+    }
+
     public Optional<List<Match>> getListOfMatchesByTournament(Tournament tournament) {
         return matchRepository.getListOfMatchesByTournament(tournament);
+    }
+
+    public Match updateMatchResult(Match match, Integer scoreTeam1Integer, Integer scoreTeam2Integer) {
+        match.setScoreTeam1(scoreTeam1Integer);
+        match.setScoreTeam2(scoreTeam2Integer);
+        return matchRepository.saveMatch(match);
     }
 
     private Match getMatch(Match match, Tournament tournament) {
@@ -67,11 +134,5 @@ public class MatchService {
         match.setScoreTeam1(0);
         match.setScoreTeam2(0);
         return match;
-    }
-
-    public Match updateMatchResult(Match match, Integer scoreTeam1Integer, Integer scoreTeam2Integer) {
-        match.setScoreTeam1(scoreTeam1Integer);
-        match.setScoreTeam2(scoreTeam2Integer);
-        return matchRepository.saveMatch(match);
     }
 }

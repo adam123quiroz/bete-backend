@@ -1,13 +1,11 @@
 package bo.edu.ucb.betebackend.domain;
 
-import bo.edu.ucb.betebackend.domain.dto.TournamentPostRequest;
-import bo.edu.ucb.betebackend.domain.typeof.TypeOfUsers;
+import bo.edu.ucb.betebackend.domain.dto.request.TournamentPostRequest;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class Tournament {

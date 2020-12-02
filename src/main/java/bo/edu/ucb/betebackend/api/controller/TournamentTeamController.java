@@ -5,7 +5,7 @@ import bo.edu.ucb.betebackend.api.exception.TournamentNotFoundException;
 import bo.edu.ucb.betebackend.domain.Team;
 import bo.edu.ucb.betebackend.domain.Tournament;
 import bo.edu.ucb.betebackend.domain.TournamentTeam;
-import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
+import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
 import bo.edu.ucb.betebackend.domain.dto.model.TournamentTeamResponseModel;
 import bo.edu.ucb.betebackend.domain.service.TeamService;
 import bo.edu.ucb.betebackend.domain.service.TournamentService;

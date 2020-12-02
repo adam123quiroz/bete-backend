@@ -1,8 +1,8 @@
 package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.domain.*;
-import bo.edu.ucb.betebackend.domain.dto.TournamentPostRequest;
-import bo.edu.ucb.betebackend.domain.dto.TournamentRequestUpdate;
+import bo.edu.ucb.betebackend.domain.dto.request.TournamentPostRequest;
+import bo.edu.ucb.betebackend.domain.dto.request.TournamentRequestUpdate;
 import bo.edu.ucb.betebackend.domain.service.GameService;
 import bo.edu.ucb.betebackend.domain.service.OrganizerService;
 import bo.edu.ucb.betebackend.domain.service.TournamentService;

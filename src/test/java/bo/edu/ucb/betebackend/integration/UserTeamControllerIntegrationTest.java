@@ -1,7 +1,9 @@
 package bo.edu.ucb.betebackend.integration;
 
 import bo.edu.ucb.betebackend.domain.Team;
-import bo.edu.ucb.betebackend.domain.dto.*;
+import bo.edu.ucb.betebackend.domain.dto.request.ChangeCaptainRequest;
+import bo.edu.ucb.betebackend.domain.dto.request.RequestUpdateIsCapitan;
+import bo.edu.ucb.betebackend.domain.dto.request.TeamUserRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

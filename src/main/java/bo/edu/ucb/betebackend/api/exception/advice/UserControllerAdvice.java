@@ -3,7 +3,7 @@ package bo.edu.ucb.betebackend.api.exception.advice;
 import bo.edu.ucb.betebackend.api.exception.RoleNotFoundException;
 import bo.edu.ucb.betebackend.api.exception.UserNotFoundException;
 import bo.edu.ucb.betebackend.api.exception.UserPasswordNotEqualsException;
-import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
+import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

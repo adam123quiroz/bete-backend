@@ -3,7 +3,7 @@ package bo.edu.ucb.betebackend.api.controller;
 import bo.edu.ucb.betebackend.api.exception.TournamentNotFoundException;
 import bo.edu.ucb.betebackend.domain.Match;
 import bo.edu.ucb.betebackend.domain.Tournament;
-import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
+import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
 import bo.edu.ucb.betebackend.domain.service.MatchService;
 import bo.edu.ucb.betebackend.domain.service.TeamService;
 import bo.edu.ucb.betebackend.domain.service.TournamentService;
@@ -82,7 +82,8 @@ public class MatchController {
             @RequestParam(name = "scoreTeam2") String scoreTeam2
     ) throws Exception {
         Integer idMatchInteger = Integer.valueOf(idMatch),
-                scoreTeam1Integer = Integer.valueOf(scoreTeam1), scoreTeam2Integer = Integer.valueOf(scoreTeam2);
+                scoreTeam1Integer = Integer.valueOf(scoreTeam1),
+                scoreTeam2Integer = Integer.valueOf(scoreTeam2);
         Match match = matchService.getMatchById(idMatchInteger)
                 .orElseThrow(Exception::new); // TODO: 12/1/2020 create a Exceptions class Match
         Match updateMatch = matchService.updateMatchResult(match, scoreTeam1Integer, scoreTeam2Integer);
@@ -98,7 +99,13 @@ public class MatchController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
     })
-    public ResponseEntity<FormatResponse<?>> updateMatchResults() throws Exception {
-        return null;
+    public ResponseEntity<FormatResponse<?>> updateMatchResults() {
+        List<Match> matches = matchService.getAllMatchesByIsFinished(0)
+                .orElseGet(Collections::emptyList);
+        List<?> objects = matchService.getListMatchWithOutcomeForecast(matches)
+                .orElseGet(Collections::emptyList);
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(objects));
     }
 }

@@ -3,7 +3,7 @@ package bo.edu.ucb.betebackend.domain.service;
 import bo.edu.ucb.betebackend.api.exception.RegionNotFoundException;
 import bo.edu.ucb.betebackend.api.exception.RoleNotFoundException;
 import bo.edu.ucb.betebackend.domain.*;
-import bo.edu.ucb.betebackend.domain.dto.ChangeRoleUserRequest;
+import bo.edu.ucb.betebackend.domain.dto.request.ChangeRoleUserRequest;
 import bo.edu.ucb.betebackend.domain.dto.model.RegistrationUserForm;
 import bo.edu.ucb.betebackend.domain.repository.IGamblerRepository;
 import bo.edu.ucb.betebackend.domain.repository.IOrganizerRepository;

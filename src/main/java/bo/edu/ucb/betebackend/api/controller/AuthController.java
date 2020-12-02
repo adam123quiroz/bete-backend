@@ -2,9 +2,9 @@ package bo.edu.ucb.betebackend.api.controller;
 
 import bo.edu.ucb.betebackend.api.security.JwtSecondUtil;
 import bo.edu.ucb.betebackend.domain.User;
-import bo.edu.ucb.betebackend.domain.dto.AuthenticationRequest;
-import bo.edu.ucb.betebackend.domain.dto.AuthenticationResponse;
-import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
+import bo.edu.ucb.betebackend.domain.dto.request.AuthenticationRequest;
+import bo.edu.ucb.betebackend.domain.dto.response.AuthenticationResponse;
+import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
 import bo.edu.ucb.betebackend.domain.service.BeteUserDetailsService;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;

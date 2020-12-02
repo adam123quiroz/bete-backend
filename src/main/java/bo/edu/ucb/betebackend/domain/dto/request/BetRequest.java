@@ -1,4 +1,4 @@
-package bo.edu.ucb.betebackend.domain.dto;
+package bo.edu.ucb.betebackend.domain.dto.request;
 
 public class BetRequest {
     private Integer matchId;

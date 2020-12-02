@@ -1,6 +1,6 @@
 package bo.edu.ucb.betebackend.integration;
 
-import bo.edu.ucb.betebackend.domain.dto.TournamentPostRequest;
+import bo.edu.ucb.betebackend.domain.dto.request.TournamentPostRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

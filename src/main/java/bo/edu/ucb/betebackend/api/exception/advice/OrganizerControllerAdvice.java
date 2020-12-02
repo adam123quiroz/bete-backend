@@ -1,7 +1,7 @@
 package bo.edu.ucb.betebackend.api.exception.advice;
 
 import bo.edu.ucb.betebackend.api.exception.OrganizerNotFoundException;
-import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
+import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

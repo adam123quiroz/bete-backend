@@ -1,6 +1,6 @@
 package bo.edu.ucb.betebackend.api.controller;
 
-import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
+import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
 import bo.edu.ucb.betebackend.domain.dto.OrderId;
 import bo.edu.ucb.betebackend.domain.service.PaymentService;
 import io.swagger.annotations.ApiOperation;

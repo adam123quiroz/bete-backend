@@ -1,12 +1,13 @@
 package bo.edu.ucb.betebackend.api.controller;
 
+import bo.edu.ucb.betebackend.api.exception.BetNoCreditException;
 import bo.edu.ucb.betebackend.api.exception.TeamNotFoundException;
 import bo.edu.ucb.betebackend.domain.Bet;
 import bo.edu.ucb.betebackend.domain.Gambler;
 import bo.edu.ucb.betebackend.domain.Match;
 import bo.edu.ucb.betebackend.domain.Team;
-import bo.edu.ucb.betebackend.domain.dto.BetRequest;
-import bo.edu.ucb.betebackend.domain.dto.FormatResponse;
+import bo.edu.ucb.betebackend.domain.dto.request.BetRequest;
+import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
 import bo.edu.ucb.betebackend.domain.service.BetService;
 import bo.edu.ucb.betebackend.domain.service.GamblerService;
 import bo.edu.ucb.betebackend.domain.service.MatchService;
@@ -67,7 +68,8 @@ public class BetController {
                 .orElseThrow(Exception::new); // TODO: 12/1/2020 Create a New Exception Gambler
         Team team = teamService.getTeamById(idTeam)
                 .orElseThrow(() -> new TeamNotFoundException(idTeam));
-        Bet newBet = betService.saveBet(match, gambler, team, bet);
+        Bet newBet = betService.saveBet(match, gambler, team, bet)
+                .orElseThrow(BetNoCreditException::new);
         return ResponseEntity
                 .ok()
                 .body(new FormatResponse<>(newBet));
