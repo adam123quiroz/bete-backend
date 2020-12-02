@@ -3,6 +3,7 @@ package bo.edu.ucb.betebackend.domain.service;
 import bo.edu.ucb.betebackend.domain.*;
 import bo.edu.ucb.betebackend.domain.dto.response.MatchExpectResponse;
 import bo.edu.ucb.betebackend.domain.repository.*;
+import bo.edu.ucb.betebackend.domain.utils.AlgorithmOfDistribution;
 import bo.edu.ucb.betebackend.domain.utils.BettingAlgorithmsUtils;
 import bo.edu.ucb.betebackend.domain.utils.LeagueUtils;
 import org.slf4j.Logger;
@@ -14,8 +15,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class MatchService {
-    private final ITournamentRepository tournamentRepository;
-    private final ITeamRepository teamRepository;
     private final ITournamentTeamRepository tournamentTeamRepository;
     private final IMatchRepository matchRepository;
     private final IBetRepository betRepository;
@@ -25,10 +24,8 @@ public class MatchService {
     final static Logger logger = LoggerFactory.getLogger(MatchService.class);
 
 
-    public MatchService(ITournamentRepository tournamentRepository, ITeamRepository teamRepository,
-                        ITournamentTeamRepository tournamentTeamRepository, IMatchRepository matchRepository, IBetRepository betRepository, LeagueUtils leagueUtils) {
-        this.tournamentRepository = tournamentRepository;
-        this.teamRepository = teamRepository;
+    public MatchService(ITournamentTeamRepository tournamentTeamRepository, IMatchRepository matchRepository,
+                        IBetRepository betRepository, LeagueUtils leagueUtils) {
         this.tournamentTeamRepository = tournamentTeamRepository;
         this.matchRepository = matchRepository;
         this.betRepository = betRepository;
@@ -36,17 +33,19 @@ public class MatchService {
     }
 
     private MatchExpectResponse apply(BettingAlgorithmsUtils bettingAlgorithmsUtils) {
-        return new MatchExpectResponse(
+        MatchExpectResponse matchExpectResponse = new MatchExpectResponse(
                 bettingAlgorithmsUtils.getIdMatch().getIdMatch(),
                 bettingAlgorithmsUtils.getIdMatch().getTournament(),
                 bettingAlgorithmsUtils.getIdMatch().getTeam1(),
                 bettingAlgorithmsUtils.getIdMatch().getTeam2(),
                 bettingAlgorithmsUtils.getIdMatch().getScoreTeam1(),
                 bettingAlgorithmsUtils.getIdMatch().getScoreTeam2(),
-                bettingAlgorithmsUtils.getExpectedTeam1(),
-                bettingAlgorithmsUtils.getExpectedTeam2(),
                 bettingAlgorithmsUtils.getIdMatch().getIsFinished()
         );
+
+        if (bettingAlgorithmsUtils.getTotalSumTeam1() == 0) matchExpectResponse.setExpectTeam1(1.0);
+        if (bettingAlgorithmsUtils.getTotalSumTeam2() == 0) matchExpectResponse.setExpectTeam2(1.0);
+        return matchExpectResponse;
     }
 
     public Optional<Match> getMatchById(Integer id) {
@@ -142,5 +141,42 @@ public class MatchService {
         match.setScoreTeam1(0);
         match.setScoreTeam2(0);
         return match;
+    }
+
+    public Match updateIsFinished(Match match, int i) {
+        match.setIsFinished(i);
+        return matchRepository.saveMatch(match);
+    }
+
+    public void spreadAllTheBets(Match updateMatch) {
+        // TODO: 12/2/2020 To Do the Tie Way
+        int sumWinningTeam = winningTeam(updateMatch, getWinnerTeam(updateMatch).get("winningTeam"));
+        int sumLoserTeam = winningTeam(updateMatch, getWinnerTeam(updateMatch).get("loserTeam"));
+        AlgorithmOfDistribution algorithmOfDistribution = new AlgorithmOfDistribution(sumWinningTeam, sumLoserTeam);
+
+    }
+
+    private int winningTeam(Match updateMatch, Team team) {
+        return betRepository.getAllBetsByMatch(updateMatch)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(bet -> bet.getTeamIdTeam().getIdTeam().equals(team.getIdTeam()))
+                .mapToInt(Bet::getQuantity)
+                .sum();
+    }
+
+    private HashMap<String, Team> getWinnerTeam(Match updateMatch) {
+        HashMap<String, Team> teamHashMap = new HashMap<>();
+        if (updateMatch.getScoreTeam1().equals(updateMatch.getScoreTeam2())) teamHashMap.put("teamTie", null);
+        if (updateMatch.getScoreTeam2() > updateMatch.getScoreTeam2())
+            assigningTeams(teamHashMap, updateMatch.getTeam2(), updateMatch.getTeam1());
+        else assigningTeams(teamHashMap, updateMatch.getTeam1(), updateMatch.getTeam2());
+        return teamHashMap;
+    }
+
+    private void assigningTeams(HashMap<String, Team> teamHashMap, Team team2, Team team1) {
+        teamHashMap.put("winningTeam", team2);
+        teamHashMap.put("loserTeam", team1);
+        teamHashMap.put("teamTie", team1);
     }
 }

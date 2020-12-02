@@ -6,7 +6,6 @@ import bo.edu.ucb.betebackend.domain.Tournament;
 import bo.edu.ucb.betebackend.domain.dto.response.FormatResponse;
 import bo.edu.ucb.betebackend.domain.dto.response.MatchExpectResponse;
 import bo.edu.ucb.betebackend.domain.service.MatchService;
-import bo.edu.ucb.betebackend.domain.service.TeamService;
 import bo.edu.ucb.betebackend.domain.service.TournamentService;
 import bo.edu.ucb.betebackend.domain.utils.LeagueUtils;
 import io.swagger.annotations.ApiOperation;
@@ -17,25 +16,24 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/match")
 public class MatchController {
-    private final TeamService teamService;
     private final TournamentService tournamentService;
     private final MatchService matchService;
 
-    public MatchController(TeamService teamService, TournamentService tournamentService, MatchService matchService) {
-        this.teamService = teamService;
+    public MatchController(TournamentService tournamentService, MatchService matchService) {
         this.tournamentService = tournamentService;
         this.matchService = matchService;
     }
 
     @CrossOrigin
     @PostMapping("/{idTournament}/draw")
-    @ApiOperation("Draw an entire tournamet creating matches between participants")
+    @ApiOperation("Draw an entire tournament creating matches between participants")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "not found"),
@@ -108,5 +106,24 @@ public class MatchController {
         return ResponseEntity
                 .ok()
                 .body(new FormatResponse<>(objects));
+    }
+
+    @CrossOrigin
+    @PatchMapping("/{idMatch}/finish")
+    @ApiOperation("Get all the matches currently available")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "not found"),
+    })
+    public ResponseEntity<FormatResponse<?>> patchMatchIsFinish(@PathVariable String idMatch)
+            throws Exception {
+        Integer idMatchInteger = Integer.valueOf(idMatch);
+        Match match = matchService.getMatchById(idMatchInteger)
+                .orElseThrow(Exception::new); // TODO: 12/2/2020 Create MatchException
+        Match updateMatch = matchService.updateIsFinished(match, 1);
+//        matchService.spreadAllTheBets(updateMatch); // FIXME: 12/2/2020 Complete SpreadAllTheBets
+        return ResponseEntity
+                .ok()
+                .body(new FormatResponse<>(updateMatch));
     }
 }

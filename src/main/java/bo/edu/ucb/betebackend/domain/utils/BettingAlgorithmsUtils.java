@@ -2,8 +2,6 @@ package bo.edu.ucb.betebackend.domain.utils;
 
 import bo.edu.ucb.betebackend.domain.Match;
 
-import java.text.DecimalFormat;
-
 public class BettingAlgorithmsUtils {
     private Match idMatch;
     private int totalSumTeam1;

@@ -27,6 +27,16 @@ public class MatchExpectResponse {
         this.isFinished = isFinished;
     }
 
+    public MatchExpectResponse(Integer idMatch, Tournament tournament, Team team1, Team team2, Integer scoreTeam1, Integer scoreTeam2, Integer isFinished) {
+        this.idMatch = idMatch;
+        this.tournament = tournament;
+        this.team1 = team1;
+        this.team2 = team2;
+        this.scoreTeam1 = scoreTeam1;
+        this.scoreTeam2 = scoreTeam2;
+        this.isFinished = isFinished;
+    }
+
     public Integer getIdMatch() {
         return idMatch;
     }
